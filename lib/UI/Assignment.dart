@@ -44,7 +44,7 @@ class _AssignmentState extends State<Assignment> {
                           return widget_items[index];
                         },
 //                        pagination: new SwiperPagination(),
-                        control: new SwiperControl(),
+
                         loop: false,
                         autoplayDisableOnInteraction:true ,
                         itemCount: widget_items.length,
