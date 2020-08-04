@@ -17,7 +17,7 @@ class _NewsLettersState extends State<NewsLetters> {
       child: Scaffold(
         body: Column(
           children: <Widget>[
-            AppBaar(name: "News Letters", ImagePath: "Images/achievement.png",
+            AppBaar(name: "News Letters", ImagePath: "Images/newnewsletter.png",
               Themecolor: pagetheme,),
             SizedBox(height: 10,),
             Expanded(

@@ -21,7 +21,7 @@ class _SyllabusState extends State<Syllabus> {
       child: Scaffold(
         body: Column(
           children: <Widget>[
-            AppBaar(name:"Syllabus",ImagePath:"Images/achievement.png",Themecolor: pagetheme,),
+            AppBaar(name:"Syllabus",ImagePath:"Images/newsyllabus.png",Themecolor: pagetheme,),
             Flexible(
               child: Container(
                 child: ListView(

@@ -1,5 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutterchalkparent/Resources/AppBaar.dart';
+import 'package:flutterchalkparent/Resources/Constant.dart';
+import 'package:flutterchalkparent/Responses/FeesResponse.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+
 
 class Fees extends StatefulWidget {
   static const String id = 'Fees';
@@ -8,6 +15,18 @@ class Fees extends StatefulWidget {
 }
 
 class _FeesState extends State<Fees> {
+  var loginResponse;
+  static FeesResponse feesResponse;
+  static int finalamnt=0;
+  List <Widget> widget_items  = new List();
+  Widget _widget= Container();
+  static String classs="0";
+
+  @override
+  void initState() {
+    getStringValuesSF();
+  }
+
   Color pagetheme = Color(0xFF8BF500);
   @override
   Widget build(BuildContext context) {
@@ -17,7 +36,7 @@ class _FeesState extends State<Fees> {
 
           child: Column(
             children: <Widget>[
-              AppBaar(name: 'Fee',ImagePath: 'Images/achievement.png',Themecolor: pagetheme,),
+              AppBaar(name: 'Fee',ImagePath: 'Images/newfee.png',Themecolor: pagetheme,),
               Container(
 //      margin: EdgeInsets.only(top: 5,left: 10.0,right: 10.0),
                 child: Expanded(
@@ -31,15 +50,10 @@ class _FeesState extends State<Fees> {
                           child: Container(
                             child: Column(
                               children: <Widget>[
-                                SizedBox(height: 40,),
-                    Text("Class V fees structure for new session 2019-2020",style: TextStyle( fontWeight: FontWeight.bold,color:Colors.blue,),),
-                                FeesWidget(Title: "Tution Fees",value: "25000",),
-                                FeesWidget(Title: "Tution Fees",value: "25000",),
-                                FeesWidget(Title: "Tution Fees",value: "25000",),
-                                FeesWidget(Title: "Tution Fees",value: "25000",),
-                                FeesWidget(Title: "Tution Fees",value: "25000",),
-                                FeesWidget(Title: "Tution Fees",value: "25000",),
-                                FeesWidget(Title: "Tution Fees",value: "25000",),
+                                SizedBox(height: 10,),
+                    Text("Class Grade-$classs fee structure ",style: TextStyle( fontWeight: FontWeight.bold,color:Colors.blue,),),
+                              SizedBox(height: 20,),
+                                _widget,
                                 Material(
                                   elevation: 10.0,
                                   borderRadius: BorderRadius.circular(5.0),
@@ -59,7 +73,7 @@ class _FeesState extends State<Fees> {
                                         Container(
                                           margin :EdgeInsets.symmetric(vertical: 10.0,horizontal: 10.0),
 
-                                          child: Text("\$250000",style: TextStyle(color: Colors.white),),
+                                          child: Text("\$$finalamnt",style: TextStyle(color: Colors.white),),
                                         )
                                       ],
                                     ),
@@ -80,6 +94,65 @@ class _FeesState extends State<Fees> {
       ),
     );
   }
+
+
+  void getStringValuesSF() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    //Return String
+    String ParentID = prefs.getString('ParentID');
+    String student =prefs.getString('Student_ID');
+    String ClassID = prefs.getString('Class_ID');
+    fetchHomeWorkData(ParentID,student,ClassID);
+
+  }
+
+  fetchHomeWorkData(String ParentID,String Student_ID,String Class_ID ) async {
+
+    Map data = {
+      'docket': Constant.docket,
+      'Parent_ID': ParentID,
+      'Student_ID': Student_ID,
+      'Class_ID': Class_ID,
+    };
+    //encode Map to JSON
+    var body = json.encode(data);
+
+    var res = await http.post(Constant.BASE_URL+Constant.getFees,
+        headers: {"Content-Type": "application/json"}, body: body);
+    print("${res.statusCode}");
+    print("${res.body}");
+    var decodedValue = jsonDecode(res.body);
+
+    feesResponse = FeesResponse.fromJson(decodedValue);
+    print("Valuee : ${FeesResponse}");
+    int total=0;
+
+    if(feesResponse.Status_Response == '200'){
+
+      for(int i = 0 ; i<feesResponse.fees_class_response.length;i++){
+        if(feesResponse.fees_class_response[i].Status_ID == '1'){
+
+           widget_items.add( FeesWidget(Title: feesResponse.fees_class_response[i].Fee_name,value: feesResponse.fees_class_response[i].Fee_amount,),);
+           total = total+ int.parse(feesResponse.fees_class_response[i].Fee_amount);
+        }
+      }
+      setState(() {
+        finalamnt=total;
+        classs=Class_ID;
+      _widget = Column(children: widget_items);
+      });
+
+
+
+    }else{
+      setState(() {
+        _widget=Center(child: Text('No Fees Found'),);
+      });
+
+
+    }
+  }
+
 }
 
 

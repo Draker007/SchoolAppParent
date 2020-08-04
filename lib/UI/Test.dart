@@ -1,6 +1,7 @@
 
 
 import 'package:circle_wheel_scroll/circle_wheel_scroll_view.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:circle_wheel_scroll/circle_wheel_scroll_view.dart' as wheel;
 import 'package:circle_wheel_scroll/circle_wheel_scroll_view.dart';
@@ -15,418 +16,267 @@ import 'Syllabus.dart';
 import 'Test.dart';
 import 'HomePage.dart';
 import 'Syllabus.dart';
-
+import 'package:charts_flutter/flutter.dart' as charts;
 class CircularListPage extends StatefulWidget {
   static const String id = "asddsa";
 
-  @override
+@override
   _CircularListPageState createState() => _CircularListPageState();
 }
 
 class _CircularListPageState extends State<CircularListPage> {
-  wheel.FixedExtentScrollController _controller;
-
-  _listListener() {
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    _controller = wheel.FixedExtentScrollController();
-    _controller.addListener(_listListener);
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _controller.removeListener(_listListener);
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xFF2F6FE0),
-      appBar: AppBar(
-        title: Text("Circular List"),
-      ),
-      body: wheel.CircleListScrollView.useDelegate(
-        childDelegate: wheel.CircleListChildBuilderDelegate(
-          builder: (context, index) {
-            int currentIndex = 0;
-            try {
-              currentIndex = _controller.selectedItem;
-            } catch (_) {}
-            final resizeFactor =
-            (1 - (((currentIndex - index).abs() * 0.3).clamp(0.0, 1.0)));
-            Character c1;
-            return CircleListItem(
-                character:Character().characters[index]
-            );
-          },
-          childCount: Character().characters.length,
-        ),
-        physics: wheel.CircleFixedExtentScrollPhysics(),
-        controller: _controller,
-        axis: Axis.vertical,
-        itemExtent: 120,
-        radius: MediaQuery.of(context).size.width * 0.8,
-      ),
-    );
-  }
-}
-
-class CircleListItem extends StatelessWidget {
-
-  final Character character;
-
-
-  CircleListItem({this.character});
-
-  @override
-  Widget build(BuildContext context) {
-    return  GestureDetector(
-      onTap: character.onPressed,
-      child: Container(
-        height: 70,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            Container(
-              height: 60.0,
-              width: 135.0,
-              child: Stack(
-                fit: StackFit.passthrough,
-                children: <Widget>[
-                  Positioned(
-                    bottom: 0.0,
-                    child: RaisedButton(
-                      elevation: 5.0,
-                      onPressed: character.onPressed,
-                      color: Colors.purple.shade900,
-//                  decoration: BoxDecoration(
-//
-//borderRadius: BorderRadius.all(Radius.circular(20))),
-                      shape: RoundedRectangleBorder(
-
-                        borderRadius: BorderRadius.circular(30.0),
-
-                      ),
-                      child: Container(
-                        height: 40.0,
-                        width: 100.0,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 7.0,
-                    child: RaisedButton(
-                      onPressed:character.onPressed ,
-                      color: Colors.white,
-//                  decoration: BoxDecoration(
-//
-//borderRadius: BorderRadius.all(Radius.circular(20))),
-                      shape: RoundedRectangleBorder(
-
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                      child: Container(
-                        child: Center(child: Text(character.Name,style: TextStyle(
-                          color: Colors.black, fontSize: 14.0,
-                        ),)),
-                        height: 40.0,
-                        width: 100.0,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Text(
-              "---------",
-              style: TextStyle(
-                  color: Colors.black, fontSize: 25.0, letterSpacing: 5.0),
-            ),
-            Container(
-                height: 40.0,
-                width: 40.0,
-                padding: EdgeInsets.all(5.0),
-                decoration: BoxDecoration(
-
-                    border: Border.all(
-                      width: 3.0,
-                      color: Colors.purple,
-                    ),
-                    borderRadius: BorderRadius.all(Radius.circular(20))),
-                child: Image(image: AssetImage(character.ImagePath)))
-          ],
-        ),
-      ),
-    );
-  }
-}
-//
-//LandingPageContanier(
-//Name: "Assignment",
-//ImagePath: "Images/achievement.png",
-//onPressed: () { Navigator.pushNamed(context, Assignment.id);},
-//),
-//LandingPageContanier(
-//Name: "Syllabus",
-//ImagePath: "Images/achievement.png",
-//onPressed: () {
-//Navigator.pushNamed(context, Syllabus.id);
-//},
-//),
-//LandingPageContanier(
-//Name: "Fees",
-//ImagePath: "Images/achievement.png",
-//onPressed: () {Navigator.pushNamed(context, Fees.id);},
-//),
-//LandingPageContanier(
-//Name: "Exams",
-//ImagePath: "Images/achievement.png",
-//onPressed: () {},
-//),
-//LandingPageContanier(
-//Name: "Results",
-//ImagePath: "Images/achievement.png",
-//onPressed: () {},
-//),
-//LandingPageContanier(
-//Name: "Achivements",
-//ImagePath: "Images/achievement.png",
-//onPressed: () {Navigator.pushNamed(context, Achivements.id);},
-//),
-//LandingPageContanier(
-//Name: "Calendar",
-//ImagePath: "Images/achievement.png",
-//onPressed: () {
-//Navigator.pushNamed(context, Calender.id);
-//},
-//),
-//LandingPageContanier(
-//Name: "Gallery",
-//ImagePath: "Images/achievement.png",
-//onPressed: () {},
-//),
-//LandingPageContanier(
-//Name: "School Info",
-//ImagePath: "Images/achievement.png",
-//onPressed: () {},
-//),
-//LandingPageContanier(
-//Name: "School Guide",
-//ImagePath: "Images/achievement.png",
-//onPressed: () {
-//Navigator.pushNamed(context, SchoolGuide.id);
-//},
-//),
-//LandingPageContanier(
-//Name: "School Leaders",
-//ImagePath: "Images/achievement.png",
-//onPressed: () {Navigator.pushNamed(context, SchoolLeaders.id);},
-//),
-//LandingPageContanier(
-//Name: "NewsLetters",
-//ImagePath: "Images/achievement.png",
-//onPressed: () {Navigator.pushNamed(context, NewsLetters.id);},
-//),
-//LandingPageContanier(
-//Name: "Achivement",
-//ImagePath: "Images/achievement.png",
-//onPressed: () {},
-//),
-//LandingPageContanier(
-//Name: "Achivement",
-//ImagePath: "Images/achievement.png",
-//onPressed: () {},
-//),
-//LandingPageContanier(
-//Name: "Test",
-//ImagePath: "Images/achievement.png",
-//onPressed: () {
-//Navigator.pushNamed(context, CircularListPage.id);
-//},
-//),
-//],
-
-
-
-
-class LandingPageContanier extends StatelessWidget {
-  String Name;
-  String ImagePath;
-  Function onPressed;
-
-  LandingPageContanier({this.Name, this.ImagePath, this.onPressed});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onPressed,
-      child: Container(
-        height: 70,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            Container(
-              height: 60.0,
-              width: 135.0,
-              child: Stack(
-                fit: StackFit.passthrough,
-                children: <Widget>[
-                  Positioned(
-                    bottom: 0.0,
-                    child: RaisedButton(
-                      elevation: 5.0,
-                      onPressed: onPressed,
-                      color: Colors.purple.shade900,
-//                  decoration: BoxDecoration(
-//
-//borderRadius: BorderRadius.all(Radius.circular(20))),
-                      shape: RoundedRectangleBorder(
-
-                        borderRadius: BorderRadius.circular(30.0),
-
-                      ),
-                      child: Container(
-                        height: 40.0,
-                        width: 100.0,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 7.0,
-                    child: RaisedButton(
-                      onPressed:onPressed ,
-                      color: Colors.white,
-//                  decoration: BoxDecoration(
-//
-//borderRadius: BorderRadius.all(Radius.circular(20))),
-                      shape: RoundedRectangleBorder(
-
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                      child: Container(
-                        child: Center(child: Text(Name,style: TextStyle(
-                          color: Colors.black, fontSize: 14.0,
-                        ),)),
-                        height: 40.0,
-                        width: 100.0,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Text(
-              "---------",
-              style: TextStyle(
-                  color: Colors.black, fontSize: 25.0, letterSpacing: 5.0),
-            ),
-            Container(
-                height: 40.0,
-                width: 40.0,
-                padding: EdgeInsets.all(5.0),
-                decoration: BoxDecoration(
-
-                    border: Border.all(
-                      width: 3.0,
-                      color: Colors.purple,
-                    ),
-                    borderRadius: BorderRadius.all(Radius.circular(20))),
-                child: Image(image: AssetImage(ImagePath)))
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-
-
-
-
-
-
-
-
-class Character {
-  String Name;
-  String ImagePath;
-  Function onPressed;
-
-
-  Character({this.Name, this.ImagePath,
-    this.onPressed}); //source: https://www.giantbomb.com/dragon-ball-z/3025-159/characters/
-
-
-  final characters = <Character>[
-    Character(
-      Name: "Test",
-      ImagePath: "Images/achievement.png",
-      onPressed: () {
-
-      },
-    ),
-    Character(
-      Name: "Test",
-      ImagePath: "Images/achievement.png",
-      onPressed: () {
-
-      },
-    ),
-    Character(
-      Name: "Test",
-      ImagePath: "Images/achievement.png",
-      onPressed: () {
-
-      },
-    ),
-    Character(
-      Name: "Test",
-      ImagePath: "Images/achievement.png",
-      onPressed: () {
-
-      },
-    ),
-    Character(
-      Name: "Test",
-      ImagePath: "Images/achievement.png",
-      onPressed: () {
-
-      },
-    ),
-    Character(
-      Name: "Test",
-      ImagePath: "Images/achievement.png",
-      onPressed: () {
-
-      },
-    ),
-    Character(
-      Name: "Test",
-      ImagePath: "Images/achievement.png",
-      onPressed: () {
-
-      },
-    ),
-    Character(
-      Name: "Test",
-      ImagePath: "Images/achievement.png",
-      onPressed: () {
-
-      },
-    ),
-    Character(
-      Name: "Test",
-      ImagePath: "Images/achievement.png",
-      onPressed: () {
-
-      },
-    ),
-
+  List<Color> gradientColors = [
+    const Color(0xffffffff),
+    const Color(0xffffffff),
   ];
+
+  List<Color> gradientColor1 = [
+    const Color(0xffffffff),
+    const Color(0xffffffff),
+  ];
+
+  bool showAvg = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+        body: Stack(
+          children: <Widget>[
+            AspectRatio(
+              aspectRatio: 1.70,
+              child: Container(
+                decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(5),
+                    ),
+                      color: Color(0xFF049A51)),
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 18.0, left: 12.0, top: 24, bottom: 12),
+                  child: LineChart(
+                    showAvg ? avgData() : mainData(),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 60,
+              height: 34,
+              child: FlatButton(
+                onPressed: () {
+                  setState(() {
+                    showAvg = !showAvg;
+                  });
+                },
+                child: Text(
+                  'avg',
+                  style: TextStyle(
+                      fontSize: 12, color: showAvg ? Colors.white.withOpacity(0.5) : Colors.white),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  LineChartData mainData() {
+
+    return LineChartData(
+      gridData: FlGridData(
+        show: true,
+        drawVerticalLine: true,
+        getDrawingHorizontalLine: (value) {
+          return FlLine(
+            color: const Color(0xffffffff),
+            strokeWidth: 0.5,
+          );
+        },
+        getDrawingVerticalLine: (value) {
+          return FlLine(
+            color: const Color(0xffffffff),
+            strokeWidth: 0.5,
+          );
+        },
+      ),
+      titlesData: FlTitlesData(
+        show: true,
+        bottomTitles: SideTitles(
+          showTitles: true,
+          reservedSize: 22,
+          textStyle:
+          const TextStyle(color: Color(0xffffffff) , fontSize: 16),
+          getTitles: (value) {
+            switch (value.toInt()) {
+              case 2:
+                return 'MAR';
+              case 5:
+                return 'JUN';
+              case 8:
+                return 'SEP';
+            }
+            return '';
+          },
+          margin: 8,
+        ),
+        leftTitles: SideTitles(
+          showTitles: true,
+          textStyle: const TextStyle(
+            color: Color(0xffffffff),
+
+            fontSize: 15,
+          ),
+          getTitles: (value) {
+            switch (value.toInt()) {
+              case 1:
+                return '10k';
+              case 3:
+                return '30k';
+              case 5:
+                return '50k';
+            }
+            return '';
+          },
+          reservedSize: 28,
+          margin: 12,
+        ),
+      ),
+      borderData:
+      FlBorderData(show: true, border: Border.all(color: const Color(0xffffffff), width: 0.5)),
+      minX: 0,
+      maxX: 11,
+      minY: 0,
+      maxY: 6,
+      lineBarsData: [
+        LineChartBarData(
+          spots: [
+            FlSpot(0, 3),
+            FlSpot(2.6, 2),
+            FlSpot(4.9, 5),
+            FlSpot(6.8, 3.1),
+            FlSpot(8, 4),
+            FlSpot(9.5, 3),
+            FlSpot(11, 4),
+          ],
+          isCurved: true,
+          colors: gradientColors,
+          barWidth: 2,
+          isStrokeCapRound: true,
+
+          dotData: FlDotData(
+
+            show: true,
+//            checkToShowDot:
+//            CheckToShowDot = bool Function(spots, spots);
+
+
+
+    ),
+          belowBarData: BarAreaData(
+            show: false,
+            colors: gradientColors.map((color) => color.withOpacity(0.3)).toList(),
+          ),
+        ),
+      ],
+
+    );
+  }
+
+  LineChartData avgData() {
+    return LineChartData(
+      lineTouchData: LineTouchData(enabled: false),
+      gridData: FlGridData(
+        show: true,
+        drawHorizontalLine: true,
+        getDrawingVerticalLine: (value) {
+          return FlLine(
+            color: const Color(0xff37434d),
+            strokeWidth: 1,
+          );
+        },
+        getDrawingHorizontalLine: (value) {
+          return FlLine(
+            color: const Color(0xff37434d),
+            strokeWidth: 1,
+          );
+        },
+      ),
+      titlesData: FlTitlesData(
+        show: true,
+        bottomTitles: SideTitles(
+          showTitles: true,
+          reservedSize: 22,
+          textStyle:
+          const TextStyle(color: Color(0xffffffff), fontWeight: FontWeight.bold, fontSize: 16),
+          getTitles: (value) {
+            switch (value.toInt()) {
+              case 2:
+                return 'MAR';
+              case 5:
+                return 'JUN';
+              case 8:
+                return 'SEP';
+            }
+            return '';
+          },
+          margin: 8,
+        ),
+        leftTitles: SideTitles(
+          showTitles: true,
+          textStyle: const TextStyle(
+            color: Color(0xffffffff),
+            fontWeight: FontWeight.bold,
+            fontSize: 15,
+          ),
+          getTitles: (value) {
+            switch (value.toInt()) {
+              case 1:
+                return '10k';
+              case 3:
+                return '30k';
+              case 5:
+                return '50k';
+            }
+            return '';
+          },
+          reservedSize: 28,
+          margin: 12,
+        ),
+      ),
+      borderData:
+      FlBorderData(show: true, border: Border.all(color: const Color(0xff37434d), width: 1)),
+      minX: 0,
+      maxX: 11,
+      minY: 0,
+      maxY: 6,
+      lineBarsData: [
+        LineChartBarData(
+          spots: [
+            FlSpot(0, 3.44),
+            FlSpot(2.6, 3.44),
+            FlSpot(4.9, 3.44),
+            FlSpot(6.8, 3.44),
+            FlSpot(8, 3.44),
+            FlSpot(9.5, 3.44),
+            FlSpot(11, 3.44),
+          ],
+          isCurved: true,
+          colors: [
+            ColorTween(begin: gradientColors[0], end: gradientColors[1]).lerp(0.2),
+            ColorTween(begin: gradientColors[0], end: gradientColors[1]).lerp(0.2),
+          ],
+          barWidth: 5,
+          isStrokeCapRound: true,
+          dotData: FlDotData(
+            show: false,
+          ),
+          belowBarData: BarAreaData(show: true, colors: [
+            ColorTween(begin: gradientColors[0], end: gradientColors[1]).lerp(0.2).withOpacity(0.1),
+            ColorTween(begin: gradientColors[0], end: gradientColors[1]).lerp(0.2).withOpacity(0.1),
+          ]),
+        ),
+      ],
+    );
+  }
 }

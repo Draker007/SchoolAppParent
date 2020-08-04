@@ -37,7 +37,7 @@ class AppBaar extends StatelessWidget {
                 children: <Widget>[
 
                   Text(
-                    "-----------------------",
+                    "---------------------",
                     style: TextStyle(
                         color: Colors.black, fontSize: 23.0, letterSpacing: 3.0),
                   ),
@@ -74,7 +74,7 @@ class AppBaar extends StatelessWidget {
                           child: Container(
 
                             height: 55.0,
-                            width: 130.0,
+                            width: MediaQuery.of(context).size.width/4,
                           ),
                         ),
                       ),
@@ -93,7 +93,7 @@ class AppBaar extends StatelessWidget {
                             color: Colors.black, fontSize: 16.0,
                           ),)),
                           height: 55.0,
-                          width: 130.0,
+                          width: MediaQuery.of(context).size.width/4,
                         ),
                       ),
 

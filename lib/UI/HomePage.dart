@@ -1,11 +1,21 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:circle_wheel_scroll/circle_wheel_scroll_view.dart';
+import 'package:flutterchalkparent/Resources/Constant.dart';
+import 'package:flutterchalkparent/Responses/HomeworkResponse.dart';
 import 'package:flutterchalkparent/UI/Achivements.dart';
 import 'package:flutterchalkparent/UI/Calender.dart';
+import 'package:flutterchalkparent/UI/Exams.dart';
 import 'package:flutterchalkparent/UI/Fees.dart';
 import 'package:flutterchalkparent/UI/NewsLetters.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'Assignment.dart';
+import 'Galllery.dart';
+import 'HomeworkPage.dart';
+import 'Result.dart';
 import 'SchoolGuide.dart';
+import 'SchoolInfo.dart';
 import 'SchoolLeaders.dart';
 import 'Syllabus.dart';
 import 'Test.dart';
@@ -22,86 +32,91 @@ class Home{
               children: <Widget>[
                 LandingPageContanier(
                   Name: "Assignment",
-                  ImagePath: "Images/achievement.png",
+                  ImagePath: "Images/newassigment.png",
                   onPressed: () { Navigator.pushNamed(context, Assignment.id);},
+                  Themecolor: Color(0xFFFF4F79),
                 ),
                 LandingPageContanier(
                   Name: "Syllabus",
-                  ImagePath: "Images/achievement.png",
+                  ImagePath: "Images/newsyllabus.png",
                   onPressed: () {
                     Navigator.pushNamed(context, Syllabus.id);
                   },
+                  Themecolor: Color(0xFF3385C9),
                 ),
                 LandingPageContanier(
                   Name: "Fees",
-                  ImagePath: "Images/achievement.png",
+                  ImagePath: "Images/newfee.png",
                   onPressed: () {Navigator.pushNamed(context, Fees.id);},
+                  Themecolor: Color(0xFF8BF500),
                 ),
                 LandingPageContanier(
                   Name: "Exams",
-                  ImagePath: "Images/achievement.png",
-                  onPressed: () {},
+                  ImagePath: "Images/newexams.png",
+                  onPressed: () {Navigator.pushNamed(context, Exams.id);},
+                  Themecolor: Color(0xFFE81A13),
                 ),
                 LandingPageContanier(
                   Name: "Results",
-                  ImagePath: "Images/achievement.png",
-                  onPressed: () {},
+                  ImagePath: "Images/newresults.png",
+                  onPressed: () {Navigator.pushNamed(context, Result.id);},
+                  Themecolor: Color(0xFF049A51),
                 ),
                 LandingPageContanier(
                   Name: "Achivements",
-                  ImagePath: "Images/achievement.png",
+                  ImagePath: "Images/newachievement.png",
                   onPressed: () {Navigator.pushNamed(context, Achivements.id);},
+                  Themecolor: Color(0xFFFF4F79),
                 ),
                 LandingPageContanier(
                   Name: "Calendar",
-                  ImagePath: "Images/achievement.png",
+                  ImagePath: "Images/newcalendar.png",
                   onPressed: () {
                     Navigator.pushNamed(context, Calender.id);
-                  },
+
+                  }, Themecolor: Color(0xFFFAA613),
                 ),
                 LandingPageContanier(
                   Name: "Gallery",
-                  ImagePath: "Images/achievement.png",
-                  onPressed: () {},
+                  ImagePath: "Images/gallery.png",
+                  onPressed: () {Navigator.pushNamed(context, Gallery.id);},
+                  Themecolor: Color(0xFF550527),
                 ),
                 LandingPageContanier(
                   Name: "School Info",
-                  ImagePath: "Images/achievement.png",
-                  onPressed: () {},
+                  ImagePath: "Images/ic_school_info.png",
+                    Themecolor:Color(0xFF3993DD),
+                  onPressed: () {Navigator.pushNamed(context, SchoolInfo.id);},
+
                 ),
                 LandingPageContanier(
                   Name: "School Guide",
-                  ImagePath: "Images/achievement.png",
+                  ImagePath: "Images/newschoolguide.png",
                   onPressed: () {
                     Navigator.pushNamed(context, SchoolGuide.id);
                   },
+                  Themecolor: Color(0xFFFAA613),
                 ),
                 LandingPageContanier(
                   Name: "School Leaders",
-                  ImagePath: "Images/achievement.png",
+                  ImagePath: "Images/newschoolleader.png",
                   onPressed: () {Navigator.pushNamed(context, SchoolLeaders.id);},
+                  Themecolor: Color(0xFF7DDD00),
                 ),
                 LandingPageContanier(
                   Name: "NewsLetters",
-                  ImagePath: "Images/achievement.png",
+                  ImagePath: "Images/newnewsletter.png",
                   onPressed: () {Navigator.pushNamed(context, NewsLetters.id);},
+                  Themecolor: Color(0xFFFF4F79),
                 ),
-                LandingPageContanier(
-                  Name: "Achivement",
-                  ImagePath: "Images/achievement.png",
-                  onPressed: () {},
-                ),
-                LandingPageContanier(
-                  Name: "Achivement",
-                  ImagePath: "Images/achievement.png",
-                  onPressed: () {},
-                ),
+
                 LandingPageContanier(
                   Name: "Test",
                   ImagePath: "Images/achievement.png",
                   onPressed: () {
-                    Navigator.pushNamed(context, CircularListPage.id);
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => CircularListPage()));
                   },
+                  Themecolor: Color(0xFFE81A13),
                 ),
               ],
             )),
@@ -115,8 +130,9 @@ class LandingPageContanier extends StatelessWidget {
   String Name;
   String ImagePath;
   Function onPressed;
+  Color Themecolor;
 
-  LandingPageContanier({this.Name, this.ImagePath, this.onPressed});
+  LandingPageContanier({this.Name, this.ImagePath, this.onPressed ,this.Themecolor});
 
   @override
   Widget build(BuildContext context) {
@@ -138,7 +154,7 @@ class LandingPageContanier extends StatelessWidget {
                     child: RaisedButton(
                       elevation: 5.0,
                       onPressed: onPressed,
-                      color: Colors.purple.shade900,
+                      color: Themecolor,
 //                  decoration: BoxDecoration(
 //
 //borderRadius: BorderRadius.all(Radius.circular(20))),
@@ -190,7 +206,7 @@ class LandingPageContanier extends StatelessWidget {
 
                     border: Border.all(
                   width: 3.0,
-                      color: Colors.purple,
+                      color: Themecolor,
                     ),
                     borderRadius: BorderRadius.all(Radius.circular(20))),
                 child: Image(image: AssetImage(ImagePath)))
@@ -199,4 +215,8 @@ class LandingPageContanier extends StatelessWidget {
       ),
     );
   }
+
+
 }
+
+

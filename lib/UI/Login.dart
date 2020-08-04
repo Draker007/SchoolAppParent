@@ -2,6 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutterchalkparent/Resources/Constant.dart';
+import 'package:flutterchalkparent/Responses/ChooseKidResponse.dart';
+
+
 import 'package:flutterchalkparent/Responses/LoginResponse.dart';
 import 'package:flutterchalkparent/UI/ForgotPassword.dart';
 import 'package:flutterchalkparent/UI/LandingPage.dart';
@@ -25,6 +28,8 @@ class _LoginState extends State<Login> {
   final passwordController = TextEditingController();
   var loginResponse;
   static LoginResponse loginRes;
+  static ChooseKidResponse ChooseKidRe;
+  var listKidsResponse;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -163,7 +168,7 @@ class _LoginState extends State<Login> {
     loginResponse = loginRes.login_response;
     if(loginRes.Status_Response == '200'){
 
-      addStringToSF();
+      fetchKidData();
 
     }else{
       setState(() {
@@ -183,14 +188,79 @@ class _LoginState extends State<Login> {
     }
   }
 
-  addStringToSF() async {
+
+
+  fetchKidData() async {
+    setState(() {
+      _saving = true;
+    });
+    Map data = {
+      'docket': Constant.docket,
+      'Parent_ID': loginRes.Parents_ID,
+    };
+    //encode Map to JSON
+    var body = json.encode(data);
+
+    var res = await http.post(Constant.BASE_URL+Constant.getChildren,
+        headers: {"Content-Type": "application/json"}, body: body);
+    print("${res.statusCode}");
+    print("${res.body}");
+    var decodedValue = jsonDecode(res.body);
+
+    ChooseKidRe = ChooseKidResponse.fromJson(decodedValue);
+    print("Valuee : ${LoginResponse}");
+    print("Login response: ${ChooseKidRe.select_kids_response[0].Student_Status}");
+
+    if(ChooseKidRe.Status_Response == '200'){
+
+      for(int i = 0 ; i<ChooseKidRe.select_kids_response.length;i++){
+        if(ChooseKidRe.select_kids_response[i].Student_Status == '1'){
+
+          addStringToSF( i);
+        }
+      }
+
+
+
+    }else{
+      setState(() {
+        _saving = false;
+      });
+
+      Fluttertoast.showToast(
+        msg: loginRes.login_response,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.grey.shade800,
+        textColor: Colors.white,
+        fontSize: 16.0,
+
+      );
+    }
+  }
+
+
+
+
+  addStringToSF(int i) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print('asaddsa');
-    print('asaddsa'+loginRes.Parents_ID);
+
+    print('asaddsa'+ChooseKidRe.select_kids_response[i].Student_ID);
     prefs.setString('ParentMail', emailController.text);
     prefs.setString('ParentPassword', passwordController.text);
     prefs.setString('ParentID', loginRes.Parents_ID);
-
+    prefs.setString('Student_ID',ChooseKidRe.select_kids_response[i].Student_ID);
+    prefs.setString('Student_Name',ChooseKidRe.select_kids_response[i].Student_Name );
+    prefs.setString('Student_Gender',ChooseKidRe.select_kids_response[i].Student_Gender );
+    prefs.setString('Student_Image_Name',ChooseKidRe.select_kids_response[i].Student_Image_Name );
+    prefs.setString('Class_Name',ChooseKidRe.select_kids_response[i].Class_Name );
+    prefs.setString('Class_number',ChooseKidRe.select_kids_response[i].Section_Name );
+    prefs.setString('Student_Gender',ChooseKidRe.select_kids_response[i].Student_Gender );
+    prefs.setString('Class_ID',ChooseKidRe.select_kids_response[i].Class_ID );
+    prefs.setString('Section_ID',ChooseKidRe.select_kids_response[i].Section_ID );
+    print(('Student_ID'));
+    print(ChooseKidRe.select_kids_response[i].Student_ID);
     Navigator.pushNamed(context, LandingPage.id);
 
   }

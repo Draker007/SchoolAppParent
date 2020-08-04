@@ -16,7 +16,7 @@ class _SchoolGuideState extends State<SchoolGuide> {
       child: Scaffold(
         body: Column(
           children: <Widget>[
-            AppBaar(name: "School Guide",ImagePath: 'Images/achievement.png',Themecolor: pagetheme,),
+            AppBaar(name: "School Guide",ImagePath: 'Images/newschoolguide.png',Themecolor: pagetheme,),
             Expanded(
                 child: ListView(
                   children: <Widget>[

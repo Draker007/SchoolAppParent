@@ -3,16 +3,20 @@ import 'package:flutterchalkparent/UI/Achivements.dart';
 import 'package:flutterchalkparent/UI/Calender.dart';
 import 'package:flutterchalkparent/UI/Fees.dart';
 import 'package:flutterchalkparent/UI/ForgotPassword.dart';
+import 'package:flutterchalkparent/UI/Galllery.dart';
 import 'package:flutterchalkparent/UI/LandingPage.dart';
 import 'package:flutterchalkparent/UI/NewsLetters.dart';
 import 'package:flutterchalkparent/UI/SchoolGuide.dart';
+import 'package:flutterchalkparent/UI/SchoolInfo.dart';
 import 'package:flutterchalkparent/UI/SchoolLeaders.dart';
 import 'package:flutterchalkparent/UI/Syllabus.dart';
 import 'UI/Assignment.dart';
 import 'UI/ChangePassword.dart';
+import 'UI/Exams.dart';
 import 'UI/Login.dart';
 import 'UI/LandingPage.dart';
 import 'UI/Profile.dart';
+import 'UI/Result.dart';
 import 'UI/Test.dart';
 
 void main() {
@@ -26,6 +30,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
+        textTheme: TextTheme(
+    bodyText2: TextStyle(fontSize: 12.0,  ),),
         // This is the theme of your application.
         //
         // Try running your application with "flutter run". You'll see the
@@ -46,7 +52,7 @@ class MyApp extends StatelessWidget {
         Login.id: (context) => Login(),
         LandingPage.id :(context) => LandingPage(),
         Syllabus.id : (context) => Syllabus(),
-        CircularListPage.id : (context) => CircularListPage(),
+//        CircularListPage.id : (context) => CircularListPage(),
         Fees.id :(context) => Fees(),
         Calender.id : (context) => Calender(),
         Achivements.id : (context) => Achivements(),
@@ -56,7 +62,10 @@ class MyApp extends StatelessWidget {
         ChangePassword.id : (context) => ChangePassword(),
         Assignment.id : (context) => Assignment(),
         NewsLetters.id : (context) => NewsLetters(),
-
+        Gallery.id : (context) => Gallery(),
+        Exams.id : (context) => Exams(),
+        Result.id : (context) => Result(),
+        SchoolInfo.id : (context) => SchoolInfo(),
 
       },
     );

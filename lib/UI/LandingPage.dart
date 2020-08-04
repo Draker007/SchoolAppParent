@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutterchalkparent/Resources/Constant.dart';
+import 'package:flutterchalkparent/Responses/HomeworkResponse.dart';
 import 'package:flutterchalkparent/UI/HomePage.dart';
 import 'package:flutterchalkparent/UI/Syllabus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,6 +10,7 @@ import 'Notification.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'HomeworkPage.dart';
 import 'Profile.dart';
+import 'package:http/http.dart' as http;
 
 class LandingPage extends StatefulWidget {
 
@@ -23,7 +28,6 @@ class _LandingPageState extends State<LandingPage> {
 
 
 
-
 int _selectedIndex = 0;
 class MyStatefulWidget extends StatefulWidget {
   MyStatefulWidget({Key key}) : super(key: key);
@@ -33,6 +37,9 @@ class MyStatefulWidget extends StatefulWidget {
 }
 
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+  static HomeworkResponse homeworkResponse;
+  List <Widget> widget_items  = new List();
+  Widget _widget;
 
   static const TextStyle optionStyle =
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
@@ -55,7 +62,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     final Tabs = [
       Home().getHome(context),
       Profile().getProfile(context),
-      HomeworkPage().getHomeworkPage(context),
+      HomeworkPage().getHomeworkPage(context,_widget),
       Notifications().getNotifications(),
     ];
     return Scaffold(
@@ -102,7 +109,65 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     //Return String
     String ParentID = prefs.getString('ParentID');
-    print(ParentID);
+    String student =prefs.getString('Student_ID');
+    String ClassID = prefs.getString('Class_ID');
+    String Section_ID = prefs.getString('Section_ID');
+    fetchHomeWorkData(ParentID,student,ClassID,Section_ID);
     return ParentID;
   }
+
+
+  fetchHomeWorkData(String ParentID,String Student_ID,String Class_ID,String Section_ID ) async {
+
+    Map data = {
+      'docket': Constant.docket,
+      'Parent_ID': ParentID,
+      'Student_ID': Student_ID,
+      'Class_ID': Class_ID,
+      'Section_ID': Section_ID,
+
+    };
+    //encode Map to JSON
+    var body = json.encode(data);
+
+    var res = await http.post(Constant.BASE_URL+Constant.getHomework,
+        headers: {"Content-Type": "application/json"}, body: body);
+    print("${res.statusCode}");
+    print("${res.body}");
+    var decodedValue = jsonDecode(res.body);
+
+    var homeworkResponse = HomeworkResponse.fromJson(decodedValue);
+    print("Valuee : ${HomeworkResponse}");
+
+    if(homeworkResponse.Status_Response == '200'){
+
+      for(int i = 0 ; i<homeworkResponse.subjects_homework_response.length;i++){
+        if(homeworkResponse.subjects_homework_response[i].Status_ID == '1'){
+          widget_items.add(HomeWorkWiget(Teacher:homeworkResponse.subjects_homework_response[i].Teachers_Name ,
+            homework: homeworkResponse.subjects_homework_response[i].Homework,
+            date: homeworkResponse.subjects_homework_response[i].Submission_date,
+              Subject:homeworkResponse.subjects_homework_response[i].Subject_Name
+
+          ));
+        }
+      }
+
+setState(() {
+  _widget= ListView(
+    children: widget_items,
+  );
+});
+
+
+    }else{
+setState(() {
+  _widget=Center(child: Text('No Homework Found'),);
+});
+
+
+
+
+    }
+  }
+
 }
