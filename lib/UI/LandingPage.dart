@@ -6,6 +6,7 @@ import 'package:flutterchalkparent/Responses/HomeworkResponse.dart';
 import 'package:flutterchalkparent/UI/HomePage.dart';
 import 'package:flutterchalkparent/UI/Syllabus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'HomeworkPages.dart';
 import 'Notification.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'HomeworkPage.dart';
@@ -42,7 +43,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   Widget _widget;
 
   static const TextStyle optionStyle =
-  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+   TextStyle( fontFamily: 'RobotoMono',fontSize: 30, fontWeight: FontWeight.bold);
 
   void _onItemTapped(int index) {
     setState(() {
@@ -51,18 +52,15 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   }
 
 
-  @override
-  void initState() {
-    getStringValuesSF();
-  }
+
 
   @override
   Widget build(BuildContext context) {
 
     final Tabs = [
       Home().getHome(context),
-      Profile().getProfile(context),
-      HomeworkPage().getHomeworkPage(context,_widget),
+      Profile() ,
+      HomeworkPages(),
       Notifications().getNotifications(),
     ];
     return Scaffold(
@@ -77,7 +75,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
               textTheme: Theme
                   .of(context)
                   .textTheme
-                  .copyWith(caption: new TextStyle(color: Colors.yellow))), // sets the inactive color of the `BottomNavigationBar`
+                  .copyWith(caption: new  TextStyle( fontFamily: 'RobotoMono',color: Colors.yellow))), // sets the inactive color of the `BottomNavigationBar`
           child:  BottomNavigationBar(
 
         items: const <BottomNavigationBarItem>[
@@ -105,69 +103,69 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     );
   }
 
-  getStringValuesSF() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    //Return String
-    String ParentID = prefs.getString('ParentID');
-    String student =prefs.getString('Student_ID');
-    String ClassID = prefs.getString('Class_ID');
-    String Section_ID = prefs.getString('Section_ID');
-    fetchHomeWorkData(ParentID,student,ClassID,Section_ID);
-    return ParentID;
-  }
-
-
-  fetchHomeWorkData(String ParentID,String Student_ID,String Class_ID,String Section_ID ) async {
-
-    Map data = {
-      'docket': Constant.docket,
-      'Parent_ID': ParentID,
-      'Student_ID': Student_ID,
-      'Class_ID': Class_ID,
-      'Section_ID': Section_ID,
-
-    };
-    //encode Map to JSON
-    var body = json.encode(data);
-
-    var res = await http.post(Constant.BASE_URL+Constant.getHomework,
-        headers: {"Content-Type": "application/json"}, body: body);
-    print("${res.statusCode}");
-    print("${res.body}");
-    var decodedValue = jsonDecode(res.body);
-
-    var homeworkResponse = HomeworkResponse.fromJson(decodedValue);
-    print("Valuee : ${HomeworkResponse}");
-
-    if(homeworkResponse.Status_Response == '200'){
-
-      for(int i = 0 ; i<homeworkResponse.subjects_homework_response.length;i++){
-        if(homeworkResponse.subjects_homework_response[i].Status_ID == '1'){
-          widget_items.add(HomeWorkWiget(Teacher:homeworkResponse.subjects_homework_response[i].Teachers_Name ,
-            homework: homeworkResponse.subjects_homework_response[i].Homework,
-            date: homeworkResponse.subjects_homework_response[i].Submission_date,
-              Subject:homeworkResponse.subjects_homework_response[i].Subject_Name
-
-          ));
-        }
-      }
-
-setState(() {
-  _widget= ListView(
-    children: widget_items,
-  );
-});
-
-
-    }else{
-setState(() {
-  _widget=Center(child: Text('No Homework Found'),);
-});
-
-
-
-
-    }
-  }
+//  getStringValuesSF() async {
+//    SharedPreferences prefs = await SharedPreferences.getInstance();
+//    //Return String
+//    String ParentID = prefs.getString('ParentID');
+//    String student =prefs.getString('Student_ID');
+//    String ClassID = prefs.getString('Class_ID');
+//    String Section_ID = prefs.getString('Section_ID');
+//    fetchHomeWorkData(ParentID,student,ClassID,Section_ID);
+//    return ParentID;
+//  }
+//
+//
+//  fetchHomeWorkData(String ParentID,String Student_ID,String Class_ID,String Section_ID ) async {
+//
+//    Map data = {
+//      'docket': Constant.docket,
+//      'Parent_ID': ParentID,
+//      'Student_ID': Student_ID,
+//      'Class_ID': Class_ID,
+//      'Section_ID': Section_ID,
+//
+//    };
+//    //encode Map to JSON
+//    var body = json.encode(data);
+//
+//    var res = await http.post(Constant.BASE_URL+Constant.getHomework,
+//        headers: {"Content-Type": "application/json"}, body: body);
+//    print("${res.statusCode}");
+//    print("${res.body}");
+//    var decodedValue = jsonDecode(res.body);
+//
+//    var homeworkResponse = HomeworkResponse.fromJson(decodedValue);
+//    print("Valuee : ${HomeworkResponse}");
+//
+//    if(homeworkResponse.Status_Response == '200'){
+//
+//      for(int i = 0 ; i<homeworkResponse.subjects_homework_response.length;i++){
+//        if(homeworkResponse.subjects_homework_response[i].Status_ID == '1'){
+//          widget_items.add(HomeWorkWiget(Teacher:homeworkResponse.subjects_homework_response[i].Teachers_Name ,
+//            homework: homeworkResponse.subjects_homework_response[i].Homework,
+//            date: homeworkResponse.subjects_homework_response[i].Submission_date,
+//              Subject:homeworkResponse.subjects_homework_response[i].Subject_Name
+//
+//          ));
+//        }
+//      }
+//
+//setState(() {
+//  _widget= ListView(
+//    children: widget_items,
+//  );
+//});
+//
+//
+//    }else{
+//setState(() {
+//  _widget=Center(child: Text('No Homework Found'),);
+//});
+//
+//
+//
+//
+//    }
+//  }
 
 }

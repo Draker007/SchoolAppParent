@@ -103,7 +103,7 @@ class NewsLetterWidget extends StatelessWidget {
                       color: Colors.blue,
                       textColor: Colors.white,
                       child: Text("Login".toUpperCase(),
-                          style: TextStyle(fontSize: 14)),
+                          style:  TextStyle( fontFamily: 'RobotoMono',fontSize: 14)),
                     ),
                   ),
                 ),

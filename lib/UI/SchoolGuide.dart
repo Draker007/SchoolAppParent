@@ -59,7 +59,7 @@ class SchoolGuideWidget extends StatelessWidget {
               padding: EdgeInsets.all(5),
               height: (MediaQuery.of(context).size.width/2)-50,
               width: (MediaQuery.of(context).size.width/2)-50,
-            child: Center(child: Text('jhgasdkjgasjd aysgdjhgs dasgd jhsagdja sda sdasd asd asdasd',textAlign: TextAlign.center,style: TextStyle(color: Colors.white),)),
+            child: Center(child: Text('jhgasdkjgasjd aysgdjhgs dasgd jhsagdja sda sdasd asd asdasd',textAlign: TextAlign.center,style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.white),)),
             ),
           ),
           Material(color: Colors.green,
@@ -68,7 +68,7 @@ class SchoolGuideWidget extends StatelessWidget {
             child: Container(
               height: (MediaQuery.of(context).size.width/2)-50,
               width: (MediaQuery.of(context).size.width/2)-50,
-              child: Center(child: Text('jhgasdkjgasjd aysgdjhgs dasgd jhsagdja sda sdasd asd asdasd',textAlign: TextAlign.center,style: TextStyle(color: Colors.white),)),
+              child: Center(child: Text('jhgasdkjgasjd aysgdjhgs dasgd jhsagdja sda sdasd asd asdasd',textAlign: TextAlign.center,style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.white),)),
 
             ),
           )

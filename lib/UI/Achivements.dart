@@ -50,9 +50,9 @@ class _AchivementsState extends State<Achivements> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text("Congratulation !",style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 18),),
+                    Text("Congratulation !",style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 18),),
                     SizedBox(height: 10.0,),
-                    Text("You Won !",style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 18))
+                    Text("You Won !",style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 18))
                   ],
                 ),
               ),
@@ -165,9 +165,9 @@ AchivementsWidget({this.Performance_title, this.Performance_Comments});
         child: Container(
           padding: EdgeInsets.all(10),
           child: Column(children: <Widget>[
-            Text(Performance_title,style: TextStyle(color: Colors.blue,fontSize: 18),),
+            Text(Performance_title,style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.blue,fontSize: 18),),
             SizedBox(height: 10,),
-            Text(Performance_Comments,style: TextStyle(color: Colors.grey),),
+            Text(Performance_Comments,style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.grey),),
 
           ],),
         ),

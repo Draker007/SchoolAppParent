@@ -103,7 +103,7 @@ class _ResultState extends State<Result> {
 
 
                             ),
-                            child: Center(child: Text("100 %",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.blue),)),
+                            child: Center(child: Text("100 %",style:  TextStyle( fontFamily: 'RobotoMono',fontWeight: FontWeight.bold,color: Colors.blue),)),
                           )
                         ],
                       ),
@@ -145,7 +145,7 @@ class _ResultState extends State<Result> {
                             },
                             child: Text(
                               'avg',
-                              style: TextStyle(
+                              style:  TextStyle( fontFamily: 'RobotoMono',
                                   fontSize: 12, color: showAvg ? Colors.white.withOpacity(0.5) : Colors.white),
                             ),
                           ),
@@ -195,7 +195,7 @@ class ResultShowMarks extends StatelessWidget {
           children: <Widget>[
             Column(
               children: <Widget>[
-                Text("Eng 1",style: TextStyle(color: Colors.blue),),
+                Text("Eng 1",style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.blue),),
                 SizedBox(height: 5,),
                 Container(
 
@@ -239,8 +239,8 @@ class ResultShowMarks extends StatelessWidget {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                Text("%",style: TextStyle(color: Colors.white,fontSize:16,fontWeight: FontWeight.bold),),
-                                Text("95",style: TextStyle(color: Colors.white,fontSize:16,fontWeight: FontWeight.bold),)
+                                Text("%",style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.white,fontSize:16,fontWeight: FontWeight.bold),),
+                                Text("95",style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.white,fontSize:16,fontWeight: FontWeight.bold),)
 
                               ],
                             ),
@@ -327,7 +327,7 @@ class ResultExamTag extends StatelessWidget {
          showTitles: true,
          reservedSize: 22,
          textStyle:
-         const TextStyle(color: Color(0xffffffff) , fontSize: 16),
+         const  TextStyle( fontFamily: 'RobotoMono',color: Color(0xffffffff) , fontSize: 16),
          getTitles: (value) {
            switch (value.toInt()) {
              case 2:
@@ -343,7 +343,7 @@ class ResultExamTag extends StatelessWidget {
        ),
        leftTitles: SideTitles(
          showTitles: true,
-         textStyle: const TextStyle(
+         textStyle: const  TextStyle( fontFamily: 'RobotoMono',
            color: Color(0xffffffff),
 
            fontSize: 15,
@@ -431,7 +431,7 @@ class ResultExamTag extends StatelessWidget {
          showTitles: true,
          reservedSize: 22,
          textStyle:
-         const TextStyle(color: Color(0xffffffff), fontWeight: FontWeight.bold, fontSize: 16),
+         const  TextStyle( fontFamily: 'RobotoMono',color: Color(0xffffffff), fontWeight: FontWeight.bold, fontSize: 16),
          getTitles: (value) {
            switch (value.toInt()) {
              case 2:
@@ -447,7 +447,7 @@ class ResultExamTag extends StatelessWidget {
        ),
        leftTitles: SideTitles(
          showTitles: true,
-         textStyle: const TextStyle(
+         textStyle: const  TextStyle( fontFamily: 'RobotoMono',
            color: Color(0xffffffff),
            fontWeight: FontWeight.bold,
            fontSize: 15,

@@ -182,7 +182,7 @@ class LandingPageContanier extends StatelessWidget {
                         borderRadius: BorderRadius.circular(30.0),
                       ),
                       child: Container(
-                        child: Center(child: Text(Name,style: TextStyle(
+                        child: Center(child: Text(Name,style:  TextStyle( fontFamily: 'RobotoMono',
                           color: Colors.black, fontSize: 14.0,
                         ),)),
                         height: 40.0,
@@ -195,7 +195,7 @@ class LandingPageContanier extends StatelessWidget {
             ),
             Text(
               "---------",
-              style: TextStyle(
+              style:  TextStyle( fontFamily: 'RobotoMono',
                   color: Colors.black, fontSize: 25.0, letterSpacing: 5.0),
             ),
             Container(

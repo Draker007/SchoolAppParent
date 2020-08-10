@@ -57,7 +57,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             color: Colors.grey,
             textColor: Colors.white,
             child: Text("Send".toUpperCase(),
-                style: TextStyle(fontSize: 14)),
+                style:  TextStyle( fontFamily: 'RobotoMono',fontSize: 14)),
           ),
         ],
       ),
@@ -129,7 +129,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         index = 0;
                       });
                     },
-                    child: Text('Resend OTP',style: TextStyle(color: Colors.blue),))
+                    child: Text('Resend OTP',style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.blue),))
               ],
             ),
             SizedBox(height: 20,),
@@ -147,7 +147,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               color: Colors.blue,
               textColor: Colors.white,
               child: Text("Send".toUpperCase(),
-                  style: TextStyle(fontSize: 14)),
+                  style:  TextStyle( fontFamily: 'RobotoMono',fontSize: 14)),
             ),
 
         ],

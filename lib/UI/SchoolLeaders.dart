@@ -143,7 +143,7 @@ class SchoolLeadersWidget extends StatelessWidget {
                           bottomLeft: Radius.circular(5.0)),
 
                   ),
-                  child: Center(child: Text(title,style: TextStyle(color: Colors.white,fontSize: 16),)),
+                  child: Center(child: Text(title,style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.white,fontSize: 16),)),
                   ),
                 ),
                 Container(
@@ -168,9 +168,9 @@ class SchoolLeadersWidget extends StatelessWidget {
                     child: Center(child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                         Text(name,style: TextStyle(color: Colors.grey[700],fontSize: 16),),
+                         Text(name,style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.grey[700],fontSize: 16),),
                         SizedBox(height: 5,),
-                        Text(classs,style: TextStyle(color: Colors.blue,fontSize: 16),),
+                        Text(classs,style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.blue,fontSize: 16),),
 
                       ],
                     )),

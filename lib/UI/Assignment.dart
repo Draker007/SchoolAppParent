@@ -169,10 +169,10 @@ AssignmentWidget({this.date, this.subject, this.assignment});
                           child: Text(assignment
                             ,overflow: TextOverflow.ellipsis,
                             maxLines: 10,
-                          style: TextStyle(fontSize: 16,color:Color(0xFF7B7B7B) ),),
+                          style:  TextStyle( fontFamily: 'RobotoMono',fontSize: 16,color:Color(0xFF7B7B7B) ),),
                         ),
                         Text('Submission Date:$date',
-                        style: TextStyle(color: Colors.blue,fontSize: 16),)
+                        style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.blue,fontSize: 16),)
                       ],
                     ),
 
@@ -193,7 +193,7 @@ AssignmentWidget({this.date, this.subject, this.assignment});
                   borderRadius: new BorderRadius.all(Radius.circular(25),),
 
                 ),padding: EdgeInsets.all(5),
-                child: Center(child: Text(subject,style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.bold),)),
+                child: Center(child: Text(subject,style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.white,fontSize: 16,fontWeight: FontWeight.bold),)),
               ),
             ],
           ),

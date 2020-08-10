@@ -70,7 +70,7 @@ class _CircularListPageState extends State<CircularListPage> {
                 },
                 child: Text(
                   'avg',
-                  style: TextStyle(
+                  style:  TextStyle( fontFamily: 'RobotoMono',
                       fontSize: 12, color: showAvg ? Colors.white.withOpacity(0.5) : Colors.white),
                 ),
               ),
@@ -106,7 +106,7 @@ class _CircularListPageState extends State<CircularListPage> {
           showTitles: true,
           reservedSize: 22,
           textStyle:
-          const TextStyle(color: Color(0xffffffff) , fontSize: 16),
+          const  TextStyle( fontFamily: 'RobotoMono',color: Color(0xffffffff) , fontSize: 16),
           getTitles: (value) {
             switch (value.toInt()) {
               case 2:
@@ -122,7 +122,7 @@ class _CircularListPageState extends State<CircularListPage> {
         ),
         leftTitles: SideTitles(
           showTitles: true,
-          textStyle: const TextStyle(
+          textStyle: const  TextStyle( fontFamily: 'RobotoMono',
             color: Color(0xffffffff),
 
             fontSize: 15,
@@ -208,7 +208,7 @@ class _CircularListPageState extends State<CircularListPage> {
           showTitles: true,
           reservedSize: 22,
           textStyle:
-          const TextStyle(color: Color(0xffffffff), fontWeight: FontWeight.bold, fontSize: 16),
+          const  TextStyle( fontFamily: 'RobotoMono',color: Color(0xffffffff), fontWeight: FontWeight.bold, fontSize: 16),
           getTitles: (value) {
             switch (value.toInt()) {
               case 2:
@@ -224,7 +224,7 @@ class _CircularListPageState extends State<CircularListPage> {
         ),
         leftTitles: SideTitles(
           showTitles: true,
-          textStyle: const TextStyle(
+          textStyle: const  TextStyle( fontFamily: 'RobotoMono',
             color: Color(0xffffffff),
             fontWeight: FontWeight.bold,
             fontSize: 15,

@@ -9,7 +9,7 @@ class HomeworkResponse{
     Status_Response = json['Status_Response'];
     if (json['subjects_homework_response'] != null) {
       subjects_homework_response = new List<Student_homework_response>();
-      json['student_assignment_response'].forEach((v) {
+      json['subjects_homework_response'].forEach((v) {
         subjects_homework_response.add(new Student_homework_response.fromJson(v));
       });
     }

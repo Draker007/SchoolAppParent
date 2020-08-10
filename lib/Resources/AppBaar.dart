@@ -38,7 +38,7 @@ class AppBaar extends StatelessWidget {
 
                   Text(
                     "---------------------",
-                    style: TextStyle(
+                    style:  TextStyle( fontFamily: 'RobotoMono',
                         color: Colors.black, fontSize: 23.0, letterSpacing: 3.0),
                   ),
                   Container(
@@ -89,7 +89,7 @@ class AppBaar extends StatelessWidget {
                           borderRadius: BorderRadius.circular(27.0),
                         ),
                         child: Container(
-                          child: Center(child: Text(name,style: TextStyle(
+                          child: Center(child: Text(name,style:  TextStyle( fontFamily: 'RobotoMono',
                             color: Colors.black, fontSize: 16.0,
                           ),)),
                           height: 55.0,

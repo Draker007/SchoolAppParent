@@ -22,7 +22,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 Themecolor: pagetheme,),
               SizedBox(height: 20,),
 
-              Text("Type your new and confirm password",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color: Colors.blue),),
+              Text("Type your new and confirm password",style:  TextStyle( fontFamily: 'RobotoMono',fontSize: 16,fontWeight: FontWeight.bold,color: Colors.blue),),
               Container(
                 margin: EdgeInsets.all(15),
                 padding: EdgeInsets.symmetric(horizontal: 10),
@@ -93,7 +93,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                   color: Colors.blue,
                   textColor: Colors.white,
                   child: Text("Send".toUpperCase(),
-                      style: TextStyle(fontSize: 14)),
+                      style:  TextStyle( fontFamily: 'RobotoMono',fontSize: 14)),
                 ),
               )
             ],

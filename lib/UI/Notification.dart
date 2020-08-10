@@ -49,21 +49,21 @@ class NotificationWidget extends StatelessWidget {
         Row(
           children: <Widget>[
 
-            Text("Independence Day",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.blue),),
+            Text("Independence Day",style:  TextStyle( fontFamily: 'RobotoMono',fontWeight: FontWeight.bold,color: Colors.blue),),
           ],
         ),
         SizedBox(
           height: 5.0,
         ),
         Text("dsawqeassdwqeqjygjkh ada sikdd ad asd sdf e w cwue cwe wie eiuuewh ciuwe hf iewuh fiu euwfhiuwehuufgiudf",
-            style : TextStyle(
+            style :  TextStyle( fontFamily: 'RobotoMono',
           color: Colors.grey
         ),),
         SizedBox(height: 5.0,),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
-            Text("24-june-2020",style: TextStyle(fontSize: 11,color: Colors.grey),),
+            Text("24-june-2020",style:  TextStyle( fontFamily: 'RobotoMono',fontSize: 11,color: Colors.grey),),
           ],
         ),
         SizedBox(

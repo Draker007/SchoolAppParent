@@ -10,6 +10,7 @@ import 'package:flutterchalkparent/UI/SchoolGuide.dart';
 import 'package:flutterchalkparent/UI/SchoolInfo.dart';
 import 'package:flutterchalkparent/UI/SchoolLeaders.dart';
 import 'package:flutterchalkparent/UI/Syllabus.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'UI/Assignment.dart';
 import 'UI/ChangePassword.dart';
 import 'UI/Exams.dart';
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         textTheme: TextTheme(
-    bodyText2: TextStyle(fontSize: 12.0,  ),),
+    bodyText2:  TextStyle( fontFamily: 'RobotoMono',fontSize: 12.0,  ),),
         // This is the theme of your application.
         //
         // Try running your application with "flutter run". You'll see the

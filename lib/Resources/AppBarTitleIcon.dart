@@ -56,7 +56,7 @@ class AppBarContanier extends StatelessWidget {
                           borderRadius: BorderRadius.circular(30.0),
                            ),
                       child: Container(
-child: Center(child: Text(Name,style: TextStyle(
+child: Center(child: Text(Name,style:  TextStyle( fontFamily: 'RobotoMono',
   color: Colors.black, fontSize: 16.0,
 ),)),
                         height: 60.0,
@@ -70,7 +70,7 @@ child: Center(child: Text(Name,style: TextStyle(
 
             Text(
               "-----------",
-              style: TextStyle(
+              style:  TextStyle( fontFamily: 'RobotoMono',
                   color: Colors.black, fontSize: 23.0, letterSpacing: 3.0),
             ),
             Container(
@@ -101,6 +101,6 @@ child: Center(child: Text(Name,style: TextStyle(
 //borderRadius: BorderRadius.all(Radius.circular(20))),
 //child: Text(
 //Name,
-//style: TextStyle(color: Colors.black, fontSize: 20.0),
+//style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.black, fontSize: 20.0),
 //),
 //),

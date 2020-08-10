@@ -51,7 +51,7 @@ class _FeesState extends State<Fees> {
                             child: Column(
                               children: <Widget>[
                                 SizedBox(height: 10,),
-                    Text("Class Grade-$classs fee structure ",style: TextStyle( fontWeight: FontWeight.bold,color:Colors.blue,),),
+                    Text("Class Grade-$classs fee structure ",style:  TextStyle( fontFamily: 'RobotoMono', fontWeight: FontWeight.bold,color:Colors.blue,),),
                               SizedBox(height: 20,),
                                 _widget,
                                 Material(
@@ -68,12 +68,12 @@ class _FeesState extends State<Fees> {
                                       children: <Widget>[
                                         Container(
                                           margin :EdgeInsets.symmetric(vertical: 10.0,horizontal: 10.0),
-                                          child: Text("Total fee balance",style: TextStyle(color: Colors.white),),
+                                          child: Text("Total fee balance",style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.white),),
                                         ),
                                         Container(
                                           margin :EdgeInsets.symmetric(vertical: 10.0,horizontal: 10.0),
 
-                                          child: Text("\$$finalamnt",style: TextStyle(color: Colors.white),),
+                                          child: Text("\$$finalamnt",style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.white),),
                                         )
                                       ],
                                     ),
