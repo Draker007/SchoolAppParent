@@ -7,6 +7,7 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutterchalkparent/Resources/AppBaar.dart';
 import 'package:flutterchalkparent/Resources/Constant.dart';
 import 'package:flutterchalkparent/Responses/GalleryImagesResponse.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -26,28 +27,31 @@ class _GalleryState extends State<Gallery> {
   List <Widget> widget_items  = new List();
   Widget _widget= Container();
   List <Widget> widget2  = new List();
-
+  bool _saving = false;
   @override
   Widget build(BuildContext context) {
 
     return SafeArea(
-      child: Scaffold(
+      child: ModalProgressHUD(
+        inAsyncCall: _saving,
+        child: Scaffold(
 
-        body: Container(
-           
-            child: Column(children: <Widget>[
-              AppBaar(name: "Gallery", ImagePath: "Images/gallery.png",
-                Themecolor: pagetheme,),
-              Expanded(
-                child: Container(
+          body: Container(
 
-                  child:ListView(
-                    children:  widget2,)
+              child: Column(children: <Widget>[
+                AppBaar(name: "Gallery", ImagePath: "Images/gallery.png",
+                  Themecolor: pagetheme,),
+                Expanded(
+                  child: Container(
+
+                    child:ListView(
+                      children:  widget2,)
+          ),
         ),
-      ),
-                    ])
+                      ])
+        )
+    ),
       )
-    )
     );
   }
 
@@ -68,7 +72,9 @@ class _GalleryState extends State<Gallery> {
   }
 
   fetchHomeWorkData(String ParentID,String Student_ID,String Class_ID ) async {
-
+setState(() {
+  _saving=true;
+});
     Map data = {
       'docket': Constant.docket,
       'Parent_ID': ParentID,
@@ -171,7 +177,7 @@ class _GalleryState extends State<Gallery> {
 
       }
       setState(() {
-
+        _saving=false;
         widget2 =  widgets;
       });
 
@@ -179,7 +185,8 @@ class _GalleryState extends State<Gallery> {
 
     }else{
       setState(() {
-        _widget=Center(child: Text('No Fees Found'),);
+        _saving=false;
+        _widget=Center(child: Text('Nothing has been added in Gallery yet..'),);
       });
 
 

@@ -7,6 +7,9 @@ import 'package:flutterchalkparent/Responses/Attendant_Response.dart';
 import 'package:flutterchalkparent/Responses/ChooseKidResponse.dart';
 import 'package:flutterchalkparent/Responses/Profile_Response.dart';
 import 'package:flutterchalkparent/Responses/Result_Response.dart';
+import 'package:flutterchalkparent/UI/ChangePassword.dart';
+import 'package:flutterchalkparent/UI/Login.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -31,328 +34,341 @@ class _ProfileState extends State<Profile> {
       Bloodgrp = '--',
       Section = '--',
       Class = '--';
+  bool _saving=false;
   List<Widget> widget_items = new List();
-
+  String img='';
  static String character;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        body: Container(
-          child: Column(
-            children: <Widget>[
-              Container(
-                height: 220,
-                width: double.infinity,
-                child: Stack(
-                  overflow: Overflow.visible,
-                  alignment: Alignment.topCenter,
-                  children: <Widget>[
-                    Container(
+      child: ModalProgressHUD(
+        inAsyncCall: _saving,
+        child: Scaffold(
+          body: Container(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  height: 220,
+                  width: double.infinity,
+                  child: Stack(
+                    overflow: Overflow.visible,
+                    alignment: Alignment.topCenter,
+                    children: <Widget>[
+                      Container(
 //                    color: Colors.blue,
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage("Images/profileBG.png"),
-                              fit: BoxFit.cover)),
-                      height: 150,
-                      width: MediaQuery.of(context).size.width,
-                    ),
-                    Container(
-                      color: Colors.transparent,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          GestureDetector(
-                            onTap: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) => CustomDailog());
-                            },
-                            child: Container(
-                                color: Colors.transparent,
-                                padding: EdgeInsets.all(30),
-                                child: Image(
-                                  image: AssetImage('Images/threedot.png'),
-                                  height: 40,
-                                  width: 5,
-                                )),
-                          ),
-                        ],
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage("Images/profileBG.png"),
+                                fit: BoxFit.cover)),
+                        height: 150,
+                        width: MediaQuery.of(context).size.width,
                       ),
-                    ),
-                    Positioned(
-                      top: 50,
-                      child: Container(
-                          margin: EdgeInsets.only(top: 35),
-                          width: 120.0,
-                          height: 120.0,
-                          decoration: new BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: new DecorationImage(
-                                  fit: BoxFit.fill,
-                                  image: new NetworkImage(
-                                      "https://i.imgur.com/BoN9kdC.png")))),
-                    ),
-                  ],
+                      Container(
+                        color: Colors.transparent,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            GestureDetector(
+                              onTap: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) => CustomDailog(changepass: (){
+                                      Navigator.pushNamed(context, ChangePassword.id);
+                                    },
+                                    logout: ()async{
+                                      SharedPreferences preferences = await SharedPreferences.getInstance();
+                                      await preferences.clear();
+                                      Navigator.of(context)
+                                          .pushNamedAndRemoveUntil(Login.id, (Route<dynamic> route) => false);
+
+                                    },));
+                              },
+                              child: Container(
+                                  color: Colors.transparent,
+                                  padding: EdgeInsets.all(30),
+                                  child: Image(
+                                    image: AssetImage('Images/threedot.png'),
+                                    height: 40,
+                                    width: 5,
+                                  )),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Positioned(
+                        top: 50,
+                        child: Container(
+                            margin: EdgeInsets.only(top: 35),
+                            width: 120.0,
+                            height: 120.0,
+                            decoration: new BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: new DecorationImage(
+                                    fit: BoxFit.fill,
+                                    image: new NetworkImage(
+                                        img)))),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Expanded(
-                  child: Container(
-                child: ListView(
-                  children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        Container(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(
-                                "Name",
-                                style: TextStyle(
-                                    fontFamily: 'RobotoMono',
-                                    color: Colors.grey[600]),
-                              ),
-                              Text(Student_Name,
+                Expanded(
+                    child: Container(
+                  child: ListView(
+                    children: <Widget>[
+                      Column(
+                        children: <Widget>[
+                          Container(
+                            padding:
+                                EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(
+                                  "Name",
                                   style: TextStyle(
                                       fontFamily: 'RobotoMono',
-                                      color: Colors.grey[600]))
-                            ],
+                                      color: Colors.grey[600]),
+                                ),
+                                Text(Student_Name,
+                                    style: TextStyle(
+                                        fontFamily: 'RobotoMono',
+                                        color: Colors.grey[600]))
+                              ],
+                            ),
                           ),
-                        ),
-                        Container(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(
-                                "Class",
-                                style: TextStyle(
-                                    fontFamily: 'RobotoMono',
-                                    color: Colors.grey[600]),
-                              ),
-                              Text(Class,
+                          Container(
+                            padding:
+                                EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(
+                                  "Class",
                                   style: TextStyle(
                                       fontFamily: 'RobotoMono',
-                                      color: Colors.grey[600]))
-                            ],
+                                      color: Colors.grey[600]),
+                                ),
+                                Text(Class,
+                                    style: TextStyle(
+                                        fontFamily: 'RobotoMono',
+                                        color: Colors.grey[600]))
+                              ],
+                            ),
                           ),
-                        ),
-                        Container(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(
-                                "Section",
-                                style: TextStyle(
-                                    fontFamily: 'RobotoMono',
-                                    color: Colors.grey[600]),
-                              ),
-                              Text(Section,
+                          Container(
+                            padding:
+                                EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(
+                                  "Section",
                                   style: TextStyle(
                                       fontFamily: 'RobotoMono',
-                                      color: Colors.grey[600]))
-                            ],
+                                      color: Colors.grey[600]),
+                                ),
+                                Text(Section,
+                                    style: TextStyle(
+                                        fontFamily: 'RobotoMono',
+                                        color: Colors.grey[600]))
+                              ],
+                            ),
                           ),
-                        ),
-                        Container(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(
-                                "Blood Group",
-                                style: TextStyle(
-                                    fontFamily: 'RobotoMono',
-                                    color: Colors.grey[600]),
-                              ),
-                              Text(Bloodgrp,
+                          Container(
+                            padding:
+                                EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(
+                                  "Blood Group",
                                   style: TextStyle(
                                       fontFamily: 'RobotoMono',
-                                      color: Colors.grey[600]))
-                            ],
+                                      color: Colors.grey[600]),
+                                ),
+                                Text(Bloodgrp,
+                                    style: TextStyle(
+                                        fontFamily: 'RobotoMono',
+                                        color: Colors.grey[600]))
+                              ],
+                            ),
                           ),
-                        ),
-                        Container(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(
-                                "Father's Name",
-                                style: TextStyle(
-                                    fontFamily: 'RobotoMono',
-                                    color: Colors.grey[600]),
-                              ),
-                              Text(FatherName,
+                          Container(
+                            padding:
+                                EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(
+                                  "Father's Name",
                                   style: TextStyle(
                                       fontFamily: 'RobotoMono',
-                                      color: Colors.grey[600]))
-                            ],
+                                      color: Colors.grey[600]),
+                                ),
+                                Text(FatherName,
+                                    style: TextStyle(
+                                        fontFamily: 'RobotoMono',
+                                        color: Colors.grey[600]))
+                              ],
+                            ),
                           ),
-                        ),
-                        Container(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(
-                                "Mother's Name",
-                                style: TextStyle(
-                                    fontFamily: 'RobotoMono',
-                                    color: Colors.grey[600]),
-                              ),
-                              Text(MotherName,
+                          Container(
+                            padding:
+                                EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(
+                                  "Mother's Name",
                                   style: TextStyle(
                                       fontFamily: 'RobotoMono',
-                                      color: Colors.grey[600]))
-                            ],
+                                      color: Colors.grey[600]),
+                                ),
+                                Text(MotherName,
+                                    style: TextStyle(
+                                        fontFamily: 'RobotoMono',
+                                        color: Colors.grey[600]))
+                              ],
+                            ),
                           ),
-                        ),
-                        Container(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(
-                                "Phone Number",
-                                style: TextStyle(
-                                    fontFamily: 'RobotoMono',
-                                    color: Colors.grey[600]),
-                              ),
-                              Text(PhoneNumber,
+                          Container(
+                            padding:
+                                EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(
+                                  "Phone Number",
                                   style: TextStyle(
                                       fontFamily: 'RobotoMono',
-                                      color: Colors.grey[600]))
-                            ],
+                                      color: Colors.grey[600]),
+                                ),
+                                Text(PhoneNumber,
+                                    style: TextStyle(
+                                        fontFamily: 'RobotoMono',
+                                        color: Colors.grey[600]))
+                              ],
+                            ),
                           ),
-                        ),
-                        Container(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(
-                                "Address",
-                                style: TextStyle(
-                                    fontFamily: 'RobotoMono',
-                                    color: Colors.grey[600]),
-                              ),
-                              Flexible(
-                                child: Container(
-                                    margin: EdgeInsets.only(left: 50),
-                                    alignment: Alignment.centerRight,
-                                    child: Text(Address,
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 5,
-                                        style: TextStyle(
-                                            fontFamily: 'RobotoMono',
-                                            color: Colors.grey[600]))),
-                              )
-                            ],
+                          Container(
+                            padding:
+                                EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(
+                                  "Address",
+                                  style: TextStyle(
+                                      fontFamily: 'RobotoMono',
+                                      color: Colors.grey[600]),
+                                ),
+                                Flexible(
+                                  child: Container(
+                                      margin: EdgeInsets.only(left: 50),
+                                      alignment: Alignment.centerRight,
+                                      child: Text(Address,
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 5,
+                                          style: TextStyle(
+                                              fontFamily: 'RobotoMono',
+                                              color: Colors.grey[600]))),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Container(
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Container(
 //                        height: 100,
 //                        width: MediaQuery.of(context).size.width,
-                          child: Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: Colors.grey.shade400)),
-                                  height: 100,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text(
-                                        Perfomance,
-                                        style: TextStyle(
-                                            fontFamily: 'RobotoMono',
-                                            color: Colors.blue,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text("Perfomance")
-                                    ],
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: Colors.grey.shade400)),
+                                    height: 100,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Text(
+                                          Perfomance,
+                                          style: TextStyle(
+                                              fontFamily: 'RobotoMono',
+                                              color: Colors.blue,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text("Perfomance")
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Expanded(
-                                child: Container(
-                                  height: 100,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: Colors.grey.shade400)),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text(
-                                        Percentage,
-                                        style: TextStyle(
-                                            fontFamily: 'RobotoMono',
-                                            color: Colors.blue,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text("Percentage")
-                                    ],
+                                Expanded(
+                                  child: Container(
+                                    height: 100,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: Colors.grey.shade400)),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Text(
+                                          Percentage,
+                                          style: TextStyle(
+                                              fontFamily: 'RobotoMono',
+                                              color: Colors.blue,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text("Percentage")
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Expanded(
-                                child: Container(
-                                  height: 100,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: Colors.grey.shade400)),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text(
-                                        Attendance,
-                                        style: TextStyle(
-                                            fontFamily: 'RobotoMono',
-                                            color: Colors.blue,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text("Attendance")
-                                    ],
+                                Expanded(
+                                  child: Container(
+                                    height: 100,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: Colors.grey.shade400)),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Text(
+                                          Attendance,
+                                          style: TextStyle(
+                                              fontFamily: 'RobotoMono',
+                                              color: Colors.blue,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text("Attendance")
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    )
-                  ],
-                ),
-              )),
-            ],
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                )),
+              ],
+            ),
           ),
         ),
       ),
@@ -380,6 +396,9 @@ class _ProfileState extends State<Profile> {
 
   fetchProfileData(String ParentID, String Student_ID, String Class_ID,
       String Section_ID) async {
+    setState(() {
+      _saving=true;
+    });
     Map data = {
       'docket': Constant.docket,
       'Parent_ID': ParentID,
@@ -401,6 +420,7 @@ class _ProfileState extends State<Profile> {
 
     if (profile_Response.Status_Response == '200') {
       setState(() {
+        _saving=false;
         Student_Name =
             profile_Response.Student_parentinfo_response[0].Student_Name;
 
@@ -416,9 +436,11 @@ class _ProfileState extends State<Profile> {
                 " ve";
         Section = profile_Response.Student_parentinfo_response[0].Section_Name;
         Class = profile_Response.Student_parentinfo_response[0].Class_Name;
+        img=Constant.DOWNLOADURL+profile_Response.Student_parentinfo_response[0].Student_Image_Name;
       });
     } else {
       setState(() {
+        _saving=false;
         Student_Name = "--";
         Attendance = '0';
         Address = "--";
@@ -436,6 +458,9 @@ class _ProfileState extends State<Profile> {
 
   fetchResultData(String ParentID, String Student_ID, String Class_ID,
       String Section_ID) async {
+    setState(() {
+      _saving=true;
+    });
     Map data = {
       'docket': Constant.docket,
       'Parent_ID': ParentID,
@@ -466,11 +491,13 @@ class _ProfileState extends State<Profile> {
       double percentage = ((totalObtained * 100) / totalMaxMarks);
 
       setState(() {
+        _saving=false;
         Percentage = percentage.toStringAsFixed(2) + " %";
-        Perfomance = '$totalObtained"/"$totalMaxMarks';
+        Perfomance = '$totalObtained/$totalMaxMarks';
       });
     } else {
       setState(() {
+        _saving=false;
         Percentage = "--";
         Perfomance = "--";
       });
@@ -479,6 +506,9 @@ class _ProfileState extends State<Profile> {
 
   fetchAttendenceData(String ParentID, String Student_ID, String Class_ID,
       String Section_ID) async {
+    setState(() {
+      _saving=true;
+    });
     Map data = {
       'docket': Constant.docket,
       'Parent_ID': ParentID,
@@ -500,12 +530,14 @@ class _ProfileState extends State<Profile> {
 
     if (attendant_Response.Status_Response == '200') {
       setState(() {
+        _saving=false;
         Attendance = attendant_Response.attendance_response[0].Present +
             '/' +
             attendant_Response.attendance_response[0].No_of_days_working;
       });
     } else {
       setState(() {
+        _saving=false;
         Attendance = "--";
       });
     }
@@ -513,6 +545,9 @@ class _ProfileState extends State<Profile> {
 
   fetchKidData(String ParentID) async {
     widget_items.clear();
+    setState(() {
+      _saving=true;
+    });
     Map data = {
       'docket': Constant.docket,
       'Parent_ID': ParentID,
@@ -559,13 +594,15 @@ class _ProfileState extends State<Profile> {
         }
       }
 
-      setState(() {
+      setState(() {_saving=false;
         _widget = Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: widget_items,
         );
       });
-    } else {}
+    } else {
+      _saving=false;
+    }
   }
 
   addStringToSF(int i) async {
@@ -591,9 +628,10 @@ class _ProfileState extends State<Profile> {
 }
 
 class CustomDailog extends StatelessWidget {
-  String image, titles, date, details;
 
-  CustomDailog({this.image, this.titles, this.date, this.details});
+  Function changepass,logout;
+
+  CustomDailog({this.changepass,this.logout });
 
   @override
   Widget build(BuildContext context) {
@@ -616,8 +654,12 @@ class CustomDailog extends StatelessWidget {
             children: <Widget>[
               Text('Manage Profile'),
               _widget,
-              Text('Change Password',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold),),
-              Text('Log out',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold),),
+              GestureDetector(
+                  onTap: changepass,
+                  child: Text('Change Password',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold),)),
+              GestureDetector(
+                  onTap:logout ,
+                  child: Text('Log out',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold),)),
             ],
           ),
         ));

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutterchalkparent/Resources/AppBaar.dart';
 import 'package:flutterchalkparent/Resources/Constant.dart';
+import 'package:flutterchalkparent/Resources/SpecialCharacters.dart';
 import 'package:flutterchalkparent/Responses/AchivementResponse.dart';
 import 'package:http/http.dart' as http;
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,16 +18,18 @@ class Achivements extends StatefulWidget {
 
 class _AchivementsState extends State<Achivements> {
 
-
+  bool _saving = false;
 //  AchivementResponse achivementResponse;
   static AchivementResponse achivementResponse;
   List <Widget> widget_items  = new List();
   Widget _widget=Container( );
+  String img;
 
   Color pagetheme = Color(0xFFFF4F79);
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: Scaffold(body: Container(child: Column(
+    return SafeArea(child:ModalProgressHUD(
+    child: Scaffold(body: Container(child: Column(
       children: <Widget>[
         AppBaar(name: "Achivements",
           ImagePath: "Images/newachievement.png",
@@ -35,14 +39,14 @@ class _AchivementsState extends State<Achivements> {
           children: <Widget>[
             Container(
               margin: EdgeInsets.only(left: 10,top:15),
-                width: 150.0,
-                height: 150.0,
+                width: 100.0,
+                height: 100.0,
                 decoration: new BoxDecoration(
                     shape: BoxShape.circle,
                     image: new DecorationImage(
                         fit: BoxFit.fill,
                         image: new NetworkImage(
-                            "https://i.imgur.com/BoN9kdC.png")
+                            img)
                     )
                 )),
             Expanded(
@@ -50,9 +54,9 @@ class _AchivementsState extends State<Achivements> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text("Congratulation !",style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 18),),
+                    Text("Congratulation !",style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 15),),
                     SizedBox(height: 10.0,),
-                    Text("You Won !",style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 18))
+                    Text("You Won !",style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 15))
                   ],
                 ),
               ),
@@ -66,8 +70,10 @@ class _AchivementsState extends State<Achivements> {
           child: _widget,
         )
       ],
-    ),),
-    ));
+    ),),),
+
+
+        inAsyncCall: _saving));
   }
 
   void getStringValuesSF() async {
@@ -78,10 +84,15 @@ class _AchivementsState extends State<Achivements> {
     String ClassID = prefs.getString('Class_ID');
     String Section_ID = prefs.getString('Section_ID');
     fetchHomeWorkData(ParentID,student,ClassID,Section_ID);
+    setState(() {
+      img= Constant.DOWNLOADURL+prefs.getString('Student_Image_Name');
+    });
 
   }
   fetchHomeWorkData(String ParentID,String Student_ID,String Class_ID,String Section_ID ) async {
-
+    setState(() {
+      _saving = true;
+    });
     Map data = {
       'docket': Constant.docket,
       'Parent_ID': ParentID,
@@ -106,8 +117,8 @@ class _AchivementsState extends State<Achivements> {
       for(int i = 0 ; i<achivementResponse.student_performance_response.length;i++){
         if(achivementResponse.student_performance_response[i].Status_ID == '1'){
           widget_items.add(AchivementsWidget(
-            Performance_Comments:achivementResponse.student_performance_response[i].Performance_Comments ,
-            Performance_title: achivementResponse.student_performance_response[i].Performance_title,
+            Performance_Comments:SpecialCharacters.getCurrectString(achivementResponse.student_performance_response[i].Performance_Comments)  ,
+            Performance_title: SpecialCharacters.getCurrectString(achivementResponse.student_performance_response[i].Performance_title),
           ));
         }
       }
@@ -122,13 +133,16 @@ setState(() {
     }else{
 
       setState(() {
-        _widget=Container(child: Center(child: Text('No Homework Found'),));
+        _widget=Container(child: Center(child: Text('No Achievements Found'),));
       });
 
 
 
 
     }
+    setState(() {
+      _saving = false;
+    });
   }
 
   @override
@@ -158,16 +172,16 @@ AchivementsWidget({this.Performance_title, this.Performance_Comments});
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.all(8),
       child: Material(
         borderRadius: BorderRadius.circular(5.0),
         elevation: 2.0,
         child: Container(
           padding: EdgeInsets.all(10),
           child: Column(children: <Widget>[
-            Text(Performance_title,style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.blue,fontSize: 18),),
-            SizedBox(height: 10,),
-            Text(Performance_Comments,style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.grey),),
+            Text(Performance_title,style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.blue,fontSize: 15),),
+            SizedBox(height: 8,),
+            Text(Performance_Comments,style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.grey,fontSize: 12),),
 
           ],),
         ),

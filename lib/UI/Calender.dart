@@ -4,8 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterchalkparent/Resources/AppBaar.dart';
 import 'package:flutterchalkparent/Resources/Constant.dart';
+import 'package:flutterchalkparent/Resources/SpecialCharacters.dart';
 import 'package:flutterchalkparent/Responses/Events_Response.dart';
 import 'package:flutterchalkparent/Responses/HolidaysList_Response.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -26,6 +28,7 @@ class Calender extends StatefulWidget {
 class _CalenderState extends State<Calender> {
   static Events_Response events_Response;
   static HolidaysList_Response holidaysList_Response;
+  bool _saving = false;
   final List<Tab> myTabs = <Tab>[
     Tab(
       text: 'Events',
@@ -37,34 +40,37 @@ class _CalenderState extends State<Calender> {
     return DefaultTabController(
       length: myTabs.length,
       child: SafeArea(
-        child: Scaffold(
-          appBar: PreferredSize(
-            preferredSize: Size.fromHeight(150.0),
-            child: AppBar(
-              backgroundColor: Colors.white,
-              flexibleSpace: Container(
-                height: 100,
-                color: Colors.white,
-                child: AppBaar(
-                  name: "Calendar",
-                  ImagePath: "Images/newcalendar.png",
-                  Themecolor: pagetheme,
+        child: ModalProgressHUD(
+          inAsyncCall: _saving ,
+          child: Scaffold(
+            appBar: PreferredSize(
+              preferredSize: Size.fromHeight(150.0),
+              child: AppBar(
+                backgroundColor: Colors.white,
+                flexibleSpace: Container(
+                  height: 100,
+                  color: Colors.white,
+                  child: AppBaar(
+                    name: "Calendar",
+                    ImagePath: "Images/newcalendar.png",
+                    Themecolor: pagetheme,
+                  ),
+                ),
+                bottom: TabBar(
+                  unselectedLabelColor: Colors.grey,
+                  labelColor: Colors.blue,
+                  indicatorColor: pagetheme,
+                  indicatorWeight: 5.0,
+                  tabs: myTabs,
                 ),
               ),
-              bottom: TabBar(
-                unselectedLabelColor: Colors.grey,
-                labelColor: Colors.blue,
-                indicatorColor: pagetheme,
-                indicatorWeight: 5.0,
-                tabs: myTabs,
-              ),
             ),
-          ),
-          body: TabBarView(
-            children: myTabs.map((Tab tab) {
-              final String label = tab.text.toLowerCase();
-              return CallTabs(label);
-            }).toList(),
+            body: TabBarView(
+              children: myTabs.map((Tab tab) {
+                final String label = tab.text.toLowerCase();
+                return CallTabs(label);
+              }).toList(),
+            ),
           ),
         ),
       ),
@@ -77,6 +83,9 @@ class _CalenderState extends State<Calender> {
     String student =prefs.getString('Student_ID');
     String ClassID = prefs.getString('Class_ID');
     String Section_ID = prefs.getString('Section_ID');
+    setState(() {
+      _saving = true;
+    });
     fetchEventsData(ParentID,student,ClassID,Section_ID);
     fetchHolidaysData(ParentID,student,ClassID,Section_ID);
 
@@ -151,8 +160,8 @@ class _CalenderState extends State<Calender> {
             break;
         }
 
-          widget_items.add(HolidayWidget(details:holidaysList_Response.holidays_response[i].Holiday_Info ,
-          title: holidaysList_Response.holidays_response[i].Holiday_Name,
+          widget_items.add(HolidayWidget(details:SpecialCharacters.getCurrectString(holidaysList_Response.holidays_response[i].Holiday_Info)  ,
+          title:  SpecialCharacters.getCurrectString(holidaysList_Response.holidays_response[i].Holiday_Name) ,
           date:date,
           month:  Month));
 
@@ -162,13 +171,15 @@ class _CalenderState extends State<Calender> {
         Holiday_widget= ListView(
           children:  widget_items,
         );
+        _saving = false;
       });
 
 
     }else{
 
       setState(() {
-        Holiday_widget=Container(child: Center(child: Text('No Homework Found'),));
+        Holiday_widget=Container(child: Center(child: Text('No Holiday Found'),));
+        _saving = false;
       });
 
 
@@ -197,7 +208,7 @@ class _CalenderState extends State<Calender> {
 
     events_Response = Events_Response.fromJson(decodedValue);
     // print("Valuee : ${holidaysList_Response.Student_leaderinfo_response}");
-
+    event_widget_items.clear();
     if(events_Response.Status_Response == '200'){
 
       for(int i = 0 ; i<events_Response.student_event_response.length;i++){
@@ -248,10 +259,11 @@ class _CalenderState extends State<Calender> {
             break;
         }
 
-        event_widget_items.add(EventsWidget(details:events_Response.student_event_response[i].Event_Info ,
-            title: events_Response.student_event_response[i].Event_Name,
+        event_widget_items.add(EventsWidget(details:SpecialCharacters.getCurrectString(events_Response.student_event_response[i].Event_Info) ,
+            title: SpecialCharacters.getCurrectString(events_Response.student_event_response[i].Event_Name),
             date:date,
             month:  Month,
+          fulldate: str,
         image:events_Response.student_event_response[i].Event_Image ,));
 
       }
@@ -260,13 +272,15 @@ class _CalenderState extends State<Calender> {
         Events_widget= ListView(
           children:  event_widget_items,
         );
+        _saving = false;
       });
 
 
     }else{
 
       setState(() {
-        Events_widget=Container(child: Center(child: Text('No Homework Found'),));
+        Events_widget=Container(child: Center(child: Text('No Event Found'),));
+        _saving = false;
       });
 
 
@@ -300,10 +314,10 @@ Widget CallTabs(String label) {
 
 
 class EventsWidget extends StatelessWidget {
-  String month,date,title,details,image;
+  String month,date,title,details,image,fulldate;
 
 
-  EventsWidget({this.month, this.date, this.title, this.details, this.image});
+  EventsWidget({this.month, this.date, this.title, this.details, this.fulldate, this.image});
 
   @override
   Widget build(BuildContext context) {
@@ -313,8 +327,9 @@ class EventsWidget extends StatelessWidget {
           GestureDetector(
             onTap: () {
               showDialog(
+
                   context: context, builder: (context) => CustomDailog(
-                date: date,
+                date: fulldate,
                 titles: title,
                 details: details,
                 image: image,

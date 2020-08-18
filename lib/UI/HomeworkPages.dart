@@ -6,9 +6,13 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterchalkparent/Resources/AppBaar.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'BottomNavigationBaar.dart';
+
 Color pagetheme = Color(0xFF4E0423);
+
 class HomeworkPages extends StatefulWidget {
   @override
   _HomeworkPagesState createState() => _HomeworkPagesState();
@@ -20,20 +24,24 @@ class _HomeworkPagesState extends State<HomeworkPages> {
   static HomeworkResponse homeworkResponse;
   List <Widget> widget_items  = new List();
   Widget _widget = Container();
+  bool _saving = false;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        body:Column(
-          children: <Widget>[
-            AppBaar(name: 'HomeWork',ImagePath: "Images/achievement.png",Themecolor: pagetheme,),
-            Expanded(
-              child: Container(
-                  child:  _widget
-              ),
-            )
-          ],
-        ) ,
+      child: ModalProgressHUD(
+        inAsyncCall: _saving,
+        child: Scaffold(
+          body:Column(
+            children: <Widget>[
+              BottomNavigationBaar(name: 'HomeWork',ImagePath: "Images/ic_money_new.png",Themecolor: pagetheme,),
+              Expanded(
+                child: Container(
+                    child:  _widget
+                ),
+              )
+            ],
+          ) ,
+        ),
       ),
     );
   }
@@ -51,7 +59,9 @@ class _HomeworkPagesState extends State<HomeworkPages> {
 
 
   fetchHomeWorkData(String ParentID,String Student_ID,String Class_ID,String Section_ID ) async {
-
+setState(() {
+  _saving=true;
+});
     Map data = {
       'docket': Constant.docket,
       'Parent_ID': ParentID,
@@ -75,7 +85,55 @@ class _HomeworkPagesState extends State<HomeworkPages> {
     if(homeworkResponse.Status_Response == '200'){
 
       for(int i = 0 ; i<homeworkResponse.subjects_homework_response.length;i++){
+
         if(homeworkResponse.subjects_homework_response[i].Status_ID == '1'){
+          String str = homeworkResponse.subjects_homework_response[i].Submission_date;
+          var arr = str.split('-');
+          var  month =   arr[1] ;
+          var date = arr[2];
+          String Month = "Jan";
+
+          switch (month){
+            case '01':
+              Month = "Jan";
+              break;
+            case '02':
+              Month = "Feb";
+              break;
+            case '03':
+              Month = "Mar";
+              break;
+            case '04':
+              Month = "Apr";
+              break;
+            case '05':
+              Month = "May";
+              break;
+            case '06':
+              Month = "Jun";
+              break;
+            case '07':
+              Month = "Jul";
+              break;
+            case '08':
+              Month = "Aug";
+              break;
+            case '09':
+              Month = "Sep";
+              break;
+            case '10':
+              Month = "Oct";
+              break;
+            case '11':
+              Month = "Nov";
+              break;
+            default:
+              Month = "Dec";
+              break;
+          }
+
+
+
           print(homeworkResponse.subjects_homework_response[i].Teachers_Name);
           print(homeworkResponse.subjects_homework_response[i].Homework);
           print(homeworkResponse.subjects_homework_response[i].Submission_date);
@@ -83,7 +141,8 @@ class _HomeworkPagesState extends State<HomeworkPages> {
           print("m here");
           widget_items.add(HomeWorkWiget(Teacher:(homeworkResponse.subjects_homework_response[i].Teachers_Name   ),
               homework: (homeworkResponse.subjects_homework_response[i].Homework ),
-              date: (homeworkResponse.subjects_homework_response[i].Submission_date ),
+              date:  Month  ,
+              month:date,
               Subject:(homeworkResponse.subjects_homework_response[i].Sub_Subject_Name )
 
           ));
@@ -91,6 +150,7 @@ class _HomeworkPagesState extends State<HomeworkPages> {
       }
 
 setState(() {
+  _saving=false;
   _widget= ListView(
     children: widget_items,
   );
@@ -100,8 +160,10 @@ setState(() {
 
 
     }else{
-
-      return  _widget=Center(child: Text('No Homework Found'),);
+      setState(() {
+        _saving=false;
+        _widget=Center(child: Text('No Homework Found'),);
+      });
 
 
 
@@ -123,9 +185,9 @@ setState(() {
 
 
 class HomeWorkWiget extends StatelessWidget {
-  String Teacher,homework,date,Subject;
+  String Teacher,homework,date,Subject,month;
 
-  HomeWorkWiget({this.Teacher, this.homework,   this.date, this.Subject});
+  HomeWorkWiget({this.Teacher, this.homework,   this.date, this.Subject, this.month});
 
 
 
@@ -187,23 +249,34 @@ class HomeWorkWiget extends StatelessWidget {
                 ),
                 Positioned(
                   left: 10,
-                  top: 20,
-                  child: Material(
+                  top: 0,
+                  bottom: 0,
+                  child: Center(
+                    child: Material(
 
-                    borderRadius: new BorderRadius.circular(5.0),
-                    elevation: 5.0,
+                      borderRadius: new BorderRadius.circular(5.0),
+                      elevation: 5.0,
 
-                    child: Container(
-                      margin: EdgeInsets.all(5.0),
-                      height: 50,
-                      width: 50,
-                      decoration: new BoxDecoration(
-                        color: Colors.purple.shade900,
+                      child: Container(
+                        margin: EdgeInsets.all(5.0),
+                        height: 50,
+                        width: 50,
+                        decoration: new BoxDecoration(
+                          color:  Color(0xFF550527),
 
-                        borderRadius: new BorderRadius.all(Radius.circular(50),),
+                          borderRadius: new BorderRadius.all(Radius.circular(50),),
 
+                        ),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              Text(month,style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.white),),
+                              Text(date,style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.white),),
+                            ],
+                          ),
+                        ),
                       ),
-                      child: Center(child: Text(date,style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.white),)),
                     ),
                   ),
                 )

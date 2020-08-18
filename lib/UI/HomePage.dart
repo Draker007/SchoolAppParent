@@ -12,7 +12,6 @@ import 'package:flutterchalkparent/UI/NewsLetters.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Assignment.dart';
 import 'Galllery.dart';
-import 'HomeworkPage.dart';
 import 'Result.dart';
 import 'SchoolGuide.dart';
 import 'SchoolInfo.dart';
@@ -110,14 +109,14 @@ class Home{
                   Themecolor: Color(0xFFFF4F79),
                 ),
 
-                LandingPageContanier(
-                  Name: "Test",
-                  ImagePath: "Images/achievement.png",
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => CircularListPage()));
-                  },
-                  Themecolor: Color(0xFFE81A13),
-                ),
+//                LandingPageContanier(
+//                  Name: "Test",
+//                  ImagePath: "Images/achievement.png",
+//                  onPressed: () {
+//                    Navigator.push(context, MaterialPageRoute(builder: (context) => CircularListPage()));
+//                  },
+//                  Themecolor: Color(0xFFE81A13),
+//                ),
               ],
             )),
       ),

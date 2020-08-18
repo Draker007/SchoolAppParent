@@ -4,10 +4,12 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterchalkparent/Resources/AppBaar.dart';
 import 'package:flutterchalkparent/Resources/Constant.dart';
+import 'package:flutterchalkparent/Resources/SpecialCharacters.dart';
 import 'package:flutterchalkparent/Responses/AboutSchool_Response.dart';
 import 'package:flutterchalkparent/Responses/Events_Response.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -26,177 +28,182 @@ class _SchoolInfoState extends State<SchoolInfo> {
   static AboutSchool_Response aboutSchool_Response;
 
   List <Widget> widget_items  = new List();
+ bool _saving = false;
+
   Widget _widget= Container();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        body: Container(
-          child: Column(
-            children: <Widget>[
-              AppBaar(name: 'School Info',ImagePath: "Images/ic_school_info.png",Themecolor: pagetheme,),
-              Expanded(
-                child: Container(
-                  child: ListView(
-                    children: <Widget>[
-                      Container(
-                        child: Column(
-                          children: <Widget>[
+      child: ModalProgressHUD(
+        inAsyncCall: _saving,
+        child: Scaffold(
+          body: Container(
+            child: Column(
+              children: <Widget>[
+                AppBaar(name: 'School Info',ImagePath: "Images/ic_school_info.png",Themecolor: pagetheme,),
+                Expanded(
+                  child: Container(
+                    child: ListView(
+                      children: <Widget>[
+                        Container(
+                          child: Column(
+                            children: <Widget>[
 //                             Container(
 //                              padding: EdgeInsets.all(5),
 //                              height: 220,
 //
 //                              child: Image.network( Constant.DOWNLOADURL+SchoolImage),
 //                            ),
-                            Image.network( Constant.DOWNLOADURL+SchoolImage),
-                            Container(
-                              padding: EdgeInsets.all(10),
-                              child: Text(SchoolInfo,style:  TextStyle( fontFamily: 'RobotoMono',color: Color(0xFF7B7B7B)),),
-                            ),
-                            Container(
-                              height: 200,
-                              child: _widget
-                            ),
-                            Container(
-                              color: Color(0xFF7B7B7B),
-                              child: Column(
-                                children: <Widget>[
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Container(
-                                    child: Row(
-                                      children: <Widget>[
-                                        SizedBox(
-                                          width: 50,
-                                        ),
-
-                                        Text("Contact Details",style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.white,fontWeight: FontWeight.bold),),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Container(
-                                      padding: EdgeInsets.all(5),
-                                    child: Row(
-                                      children: <Widget>[
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Container(
-
-                                            decoration: BoxDecoration(
-
-                                                border: Border.all(
-                                                  color: Colors.white,
-                                                ),
-                                      color: Colors.white,
-                                                borderRadius: BorderRadius.all(Radius.circular(25))
-                                            ),
-
-                                            child: Icon(Icons.location_on,color: Color(0xFF7B7B7B),)),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Flexible(
-                                          child: Text(SchoolAddress,
-                                            overflow: TextOverflow.ellipsis,
-                                          maxLines: 10,style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.white),),
-                                        ),
-                                     SizedBox(
-                                       width: MediaQuery.of(context).size.width/3,
-                                     )
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.all(5),
-                                    child: Row(
-                                      children: <Widget>[
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Container(
-
-                                            decoration: BoxDecoration(
-
-                                                border: Border.all(
-                                                  color: Colors.white,
-                                                ),
-                                                color: Colors.white,
-                                                borderRadius: BorderRadius.all(Radius.circular(25))
-                                            ),
-
-                                            child: Icon(Icons.phone,color: Color(0xFF7B7B7B),)),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Flexible(
-                                          child: Text(SchoolPhone,
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 10,style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.white),),
-                                        ),
-                                        SizedBox(
-                                          width: MediaQuery.of(context).size.width/3,
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.all(5),
-                                    child: Row(
-                                      children: <Widget>[
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Container(
-
-                                            decoration: BoxDecoration(
-
-                                                border: Border.all(
-                                                  color: Colors.white,
-                                                ),
-                                                color: Colors.white,
-                                                borderRadius: BorderRadius.all(Radius.circular(25))
-                                            ),
-
-                                            child: Icon(Icons.email,color: Color(0xFF7B7B7B),)),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Flexible(
-                                          child: Text(SchoolEmail,
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 10,style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.white),),
-                                        ),
-                                        SizedBox(
-                                          width: MediaQuery.of(context).size.width/3,
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height:5,
-                                  )
-                                ],
+                              Image.network( Constant.DOWNLOADURL+SchoolImage),
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                child: Text(SchoolInfo,style:  TextStyle( fontFamily: 'RobotoMono',color: Color(0xFF7B7B7B)),),
                               ),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
+                              Container(
+                                height: 200,
+                                child: _widget
+                              ),
+                              Container(
+                                color: Color(0xFF7B7B7B),
+                                child: Column(
+                                  children: <Widget>[
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Container(
+                                      child: Row(
+                                        children: <Widget>[
+                                          SizedBox(
+                                            width: 50,
+                                          ),
+
+                                          Text("Contact Details",style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.white,fontWeight: FontWeight.bold),),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Container(
+                                        padding: EdgeInsets.all(5),
+                                      child: Row(
+                                        children: <Widget>[
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Container(
+
+                                              decoration: BoxDecoration(
+
+                                                  border: Border.all(
+                                                    color: Colors.white,
+                                                  ),
+                                        color: Colors.white,
+                                                  borderRadius: BorderRadius.all(Radius.circular(25))
+                                              ),
+
+                                              child: Icon(Icons.location_on,color: Color(0xFF7B7B7B),)),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Flexible(
+                                            child: Text(SchoolAddress,
+                                              overflow: TextOverflow.ellipsis,
+                                            maxLines: 10,style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.white),),
+                                          ),
+                                       SizedBox(
+                                         width: MediaQuery.of(context).size.width/3,
+                                       )
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.all(5),
+                                      child: Row(
+                                        children: <Widget>[
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Container(
+
+                                              decoration: BoxDecoration(
+
+                                                  border: Border.all(
+                                                    color: Colors.white,
+                                                  ),
+                                                  color: Colors.white,
+                                                  borderRadius: BorderRadius.all(Radius.circular(25))
+                                              ),
+
+                                              child: Icon(Icons.phone,color: Color(0xFF7B7B7B),)),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Flexible(
+                                            child: Text(SchoolPhone,
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 10,style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.white),),
+                                          ),
+                                          SizedBox(
+                                            width: MediaQuery.of(context).size.width/3,
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.all(5),
+                                      child: Row(
+                                        children: <Widget>[
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Container(
+
+                                              decoration: BoxDecoration(
+
+                                                  border: Border.all(
+                                                    color: Colors.white,
+                                                  ),
+                                                  color: Colors.white,
+                                                  borderRadius: BorderRadius.all(Radius.circular(25))
+                                              ),
+
+                                              child: Icon(Icons.email,color: Color(0xFF7B7B7B),)),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Flexible(
+                                            child: Text(SchoolEmail,
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 10,style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.white),),
+                                          ),
+                                          SizedBox(
+                                            width: MediaQuery.of(context).size.width/3,
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height:5,
+                                    )
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -215,7 +222,10 @@ class _SchoolInfoState extends State<SchoolInfo> {
   }
 
   fetchSchoolData(String ParentID,String Student_ID,String Class_ID ) async {
+setState(() {
+  _saving = true;
 
+});
     Map data = {
       'docket': Constant.docket,
       'Parent_ID': ParentID,
@@ -237,9 +247,9 @@ class _SchoolInfoState extends State<SchoolInfo> {
 
     if(aboutSchool_Response.Status_Response == '200'){
       setState(() {
-        SchoolAddress=aboutSchool_Response.about_school_response[0].About_School_Contact_Address;
+        SchoolAddress=SpecialCharacters.getCurrectString(aboutSchool_Response.about_school_response[0].About_School_Contact_Address);
         SchoolEmail=aboutSchool_Response.about_school_response[0].About_School_Contact_Email;
-        SchoolInfo=aboutSchool_Response.about_school_response[0].About_School_Info;
+        SchoolInfo=SpecialCharacters.getCurrectString(aboutSchool_Response.about_school_response[0].About_School_Info);
         SchoolImage=aboutSchool_Response.about_school_response[0].About_School_Images;
         SchoolPhone=aboutSchool_Response.about_school_response[0].About_School_Contact_Number;
       });
@@ -249,12 +259,13 @@ class _SchoolInfoState extends State<SchoolInfo> {
 
           widget_items.add(  SchoolInfoImage(
             image:aboutSchool_Response.Admin_schoolfacilitylist_response[i].About_School_Facility_Images ,
-            title: aboutSchool_Response.Admin_schoolfacilitylist_response[i].About_School_Facility_Info,
+            title: SpecialCharacters.getCurrectString(aboutSchool_Response.Admin_schoolfacilitylist_response[i].About_School_Facility_Info),
           )  );
 
 
       }
       setState(() {
+        _saving = false;
 
         _widget = ListView(
             scrollDirection: Axis.horizontal,
@@ -266,6 +277,8 @@ class _SchoolInfoState extends State<SchoolInfo> {
 
     }else{
       setState(() {
+        _saving = false;
+
         _widget=Center( );
       });
 

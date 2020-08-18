@@ -6,8 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutterchalkparent/Resources/AppBaar.dart';
 import 'package:flutterchalkparent/Resources/Constant.dart';
+import 'package:flutterchalkparent/Resources/SpecialCharacters.dart';
 import 'package:flutterchalkparent/Responses/Exam_Subject_Response.dart';
 import 'package:flutterchalkparent/Responses/Exams_Response.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -33,92 +35,96 @@ class _ExamsState extends State<Exams> {
   Widget _Slaybusswidget = Container();
 
   static String ParentID,student, ClassID;
+  bool _saving = false;
 
 
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        body: Container(
-          child: Column(
-            children: <Widget>[
-              AppBaar(
-                name: "Exams",
-                ImagePath: "Images/newexams.png",
-                Themecolor: pagetheme,
-              ),
-              Container(
+      child: ModalProgressHUD(
+        inAsyncCall: _saving ,
+        child: Scaffold(
+          body: Container(
+            child: Column(
+              children: <Widget>[
+                AppBaar(
+                  name: "Exams",
+                  ImagePath: "Images/newexams.png",
+                  Themecolor: pagetheme,
+                ),
+                Container(
 
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.all(15.0),
-                      width: (MediaQuery.of(context).size.width),
-                      height: (MediaQuery.of(context).size.height / 2),
-                      child: Material(
-                        elevation: 4,
-                        child: Container(
-                          padding: EdgeInsets.all(15),
-                          child: Column(
-                        children: <Widget>[
-                          Container(
-                            height: 60,
-                            width:
-                                MediaQuery.of(context).size.width - 100,
-                            child: _widget,
-                          ),
-                          Row(
-                            children: <Widget>[
-                              Expanded(
-                                  child: Text(
-                                "Date",
-                                style: TextStyle(
-                                    fontFamily: 'RobotoMono',
-                                    color: Colors.blue),
-                              )),
-                              Expanded(
-                                  child: Text(
-                                "Subject",
-                                style: TextStyle(
-                                    fontFamily: 'RobotoMono',
-                                    color: Colors.blue),
-                              )),
-                              Expanded(
-                                  child: Text(
-                                "Max. Marks",
-                                style: TextStyle(
-                                    fontFamily: 'RobotoMono',
-                                    color: Colors.blue),
-                              )),
-                            ],
-                          ),
-                          Expanded(
-                              child: Container(
-                            child: ListView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.all(15.0),
+                        width: (MediaQuery.of(context).size.width),
+                        height: (MediaQuery.of(context).size.height / 2),
+                        child: Material(
+                          elevation: 4,
+                          child: Container(
+                            padding: EdgeInsets.all(15),
+                            child: Column(
+                          children: <Widget>[
+                            Container(
+                              height: 60,
+                              width:
+                                  MediaQuery.of(context).size.width - 100,
+                              child: _widget,
+                            ),
+                            Row(
                               children: <Widget>[
-                                _Subjectswidget
+                                Expanded(
+                                    child: Text(
+                                  "Date",
+                                  style: TextStyle(
+                                      fontFamily: 'RobotoMono',
+                                      color: Colors.blue),
+                                )),
+                                Expanded(
+                                    child: Text(
+                                  "Subject",
+                                  style: TextStyle(
+                                      fontFamily: 'RobotoMono',
+                                      color: Colors.blue),
+                                )),
+                                Expanded(
+                                    child: Text(
+                                  "Max. Marks",
+                                  style: TextStyle(
+                                      fontFamily: 'RobotoMono',
+                                      color: Colors.blue),
+                                )),
                               ],
                             ),
-                          ))
-                        ],
+                            Expanded(
+                                child: Container(
+                              child: ListView(
+                                children: <Widget>[
+                                  _Subjectswidget
+                                ],
+                              ),
+                            ))
+                          ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Container(
-                      height: MediaQuery.of(context).size.height / 4,
-                      width: MediaQuery.of(context).size.width,
-                      child:_Slaybusswidget,
-                    ),
-                    SizedBox(
-                      height: 1,
-                    )
-                  ],
+                      Container(
+                        height: MediaQuery.of(context).size.height / 4,
+                        width: MediaQuery.of(context).size.width,
+                        child:_Slaybusswidget,
+                      ),
+                      SizedBox(
+                        height: 1,
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -136,12 +142,17 @@ class _ExamsState extends State<Exams> {
       ParentID = prefs.getString('ParentID');
       student = prefs.getString('Student_ID');
       ClassID = prefs.getString('Class_ID');
-
+setState(() {
+  _saving = true;
+});
     fetchExamData(ParentID, student, ClassID);
   }
 
   fetchExamSubjecData(String ParentID, String Student_ID, String Class_ID,
       String examsID) async {
+    setState(() {
+      _saving = true;
+    });
     Map data = {
       'docket': Constant.docket,
       'Parent_ID': ParentID,
@@ -172,11 +183,57 @@ class _ExamsState extends State<Exams> {
       for (int i = 0;
           i < exam_Subject_Response.exams_subjects_response.length;
           i++) {
+        String str = exam_Subject_Response.exams_subjects_response[i].Exams_Date;
+        var arr = str.split('-');
+        var  month =   arr[1] ;
+        var date = arr[2];
+        String Month = "Jan";
+
+        switch (month){
+          case '01':
+            Month = "Jan";
+            break;
+          case '02':
+            Month = "Feb";
+            break;
+          case '03':
+            Month = "Mar";
+            break;
+          case '04':
+            Month = "Apr";
+            break;
+          case '05':
+            Month = "May";
+            break;
+          case '06':
+            Month = "Jun";
+            break;
+          case '07':
+            Month = "Jul";
+            break;
+          case '08':
+            Month = "Aug";
+            break;
+          case '09':
+            Month = "Sep";
+            break;
+          case '10':
+            Month = "Oct";
+            break;
+          case '11':
+            Month = "Nov";
+            break;
+          default:
+            Month = "Dec";
+            break;
+        }
+
+
         String subject="";
         if(exam_Subject_Response.exams_subjects_response[i].Syllabus.trim()==""){
           sllaybus = 'Portion for this subject has not been added, please contact your subject teacher.';
         }else{
-          sllaybus =exam_Subject_Response.exams_subjects_response[i].Syllabus;
+          sllaybus =SpecialCharacters.getCurrectString(exam_Subject_Response.exams_subjects_response[i].Syllabus);
         }
         if(exam_Subject_Response.exams_subjects_response[i].Subject_label_name.contains(" ")){
           var arr=exam_Subject_Response.exams_subjects_response[i].Subject_label_name.split(' ');
@@ -187,13 +244,16 @@ class _ExamsState extends State<Exams> {
         ExamsSubjects.add(EnterMarksWidget(date : exam_Subject_Response.exams_subjects_response[i].Exams_Date,
         marks: exam_Subject_Response.exams_subjects_response[i].Exams_Max_Marks,
           Subject: subject ,) );
-        ExamSllyabuss.add(ExamSllyabus(Date:exam_Subject_Response.exams_subjects_response[i].Exams_Date ,
+        ExamSllyabuss.add(ExamSllyabus(Date:Month+"   "+date ,
           subject: subject,
          sllaybus:sllaybus ,));
+
+
 
       }
 
       setState(() {
+        _saving = false;
         _Slaybusswidget=  Swiper(
           itemBuilder: (BuildContext context, int index) {
             return ExamSllyabuss[index];
@@ -216,6 +276,9 @@ class _ExamsState extends State<Exams> {
   }
 
   fetchExamData(String ParentID, String Student_ID, String Class_ID) async {
+    setState(() {
+      _saving = true;
+    });
     Map data = {
       'docket': Constant.docket,
       'Parent_ID': ParentID,
@@ -249,7 +312,7 @@ class _ExamsState extends State<Exams> {
                   colorchangfunction(i,exams_Response);
                 },
                 keys:i,
-              colorss: Colors.red,
+                colorss: Colors.red,
                 exam: s1[0].substring(0, 1).toUpperCase() +
                     " " +
                     s1[1].substring(0, 1).toUpperCase()),
@@ -273,6 +336,7 @@ class _ExamsState extends State<Exams> {
       }
 
       setState(() {
+        _saving = false;
         _widget = Row(
             mainAxisAlignment:
             MainAxisAlignment.spaceEvenly,

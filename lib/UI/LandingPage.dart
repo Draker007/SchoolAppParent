@@ -1,15 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutterchalkparent/Resources/Constant.dart';
 import 'package:flutterchalkparent/Responses/HomeworkResponse.dart';
 import 'package:flutterchalkparent/UI/HomePage.dart';
-import 'package:flutterchalkparent/UI/Syllabus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'HomeworkPages.dart';
-import 'Notification.dart';
+
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'HomeworkPage.dart';
+
+import 'Notifications.dart';
 import 'Profile.dart';
 import 'package:http/http.dart' as http;
 
@@ -59,9 +57,9 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
 
     final Tabs = [
       Home().getHome(context),
-      Profile() ,
       HomeworkPages(),
-      Notifications().getNotifications(),
+      Notifications(),
+      Profile() ,
     ];
     return Scaffold(
 
@@ -75,29 +73,37 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
               textTheme: Theme
                   .of(context)
                   .textTheme
-                  .copyWith(caption: new  TextStyle( fontFamily: 'RobotoMono',color: Colors.yellow))), // sets the inactive color of the `BottomNavigationBar`
+                  .copyWith(caption: new  TextStyle( fontFamily: 'RobotoMono',color: Colors.white))), // sets the inactive color of the `BottomNavigationBar`
           child:  BottomNavigationBar(
-
+            selectedIconTheme: IconThemeData(
+              size: 25
+            ),
+            selectedFontSize: 15,
+            unselectedIconTheme: IconThemeData(
+                size: 20
+            ),
+            unselectedFontSize: 10,
+        type: BottomNavigationBarType.fixed,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             title: Text('Home'),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(FontAwesomeIcons.user),
-            title: Text('Profile'),
-          ),
-          BottomNavigationBarItem(
+           BottomNavigationBarItem(
             icon: Icon(Icons.book),
             title: Text('HomeWork'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.notifications),
             title: Text('Notification'),
+              ),
+          BottomNavigationBarItem(
+            icon: Icon(FontAwesomeIcons.user),
+            title: Text('Profile'),
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
+        selectedItemColor:  Colors.white,
         onTap: _onItemTapped,
       )),
     );

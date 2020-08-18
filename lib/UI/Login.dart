@@ -36,7 +36,7 @@ class _LoginState extends State<Login> {
       child: ModalProgressHUD(
         child: Scaffold(
           body: Container(
-            margin: EdgeInsets.only(bottom: 100.0),
+
             decoration: BoxDecoration(
 
               image: DecorationImage(
@@ -44,96 +44,102 @@ class _LoginState extends State<Login> {
                 fit: BoxFit.cover,
               ),
             ),
-            child: Column(
-
-              mainAxisAlignment: MainAxisAlignment.end,
+            child: ListView(
               children: <Widget>[
                 Container(
-                  padding: EdgeInsets.all(20.0),
-                  child: Material(
+                  height: MediaQuery.of(context).size.height-100,
+                  child: Column(
 
-                    borderRadius: new BorderRadius.circular(20.0),
-                    elevation: 10.0,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.all(20.0),
+                        child: Material(
 
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 20.0),
-                      margin: EdgeInsets.only(bottom: 50.0,top: 30.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment : CrossAxisAlignment.center,
-                  children: <Widget>[
-                  Text('Login'),
-                      TextField(
+                          borderRadius: new BorderRadius.circular(20.0),
+                          elevation: 10.0,
 
-                        controller: emailController,
-                        decoration: InputDecoration(
-                          labelText: 'UserName',
-
-                        ),
-
-                      ),
-            PasswordField(
-              controller: passwordController,
-              hasFloatingPlaceholder: true,
-              pattern: r'.*[@$#.*].*',
-              errorMessage: 'must contain special character either . * @ # \$',
-            ),
-                      Column(
-
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 20.0),
+                            margin: EdgeInsets.only(bottom: 50.0,top: 30.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment : CrossAxisAlignment.center,
                         children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 50.0,vertical: 30.0),
-                            child: RaisedButton(
-                              padding: EdgeInsets.symmetric(vertical: 15.0),
-                              shape: RoundedRectangleBorder(
+                        Text('Login'),
+                            TextField(
 
-                                  borderRadius: BorderRadius.circular(30.0),
-                                  side: BorderSide(color: Colors.purple.shade900)),
-                              onPressed: () {
-                                if(emailController.text != '' && passwordController.text != ''){
+                              controller: emailController,
+                              decoration: InputDecoration(
+                                labelText: 'UserName',
 
-                                  setState(() {
-                                   fetchData();
+                              ),
 
-
-
-                                  });
-
-                                }else{
-                                  Fluttertoast.showToast(
-                                      msg: "Please Fill all fields",
-                                      toastLength: Toast.LENGTH_SHORT,
-
-                                      timeInSecForIosWeb: 1,
-
-                                      textColor: Colors.white,
-                                      fontSize: 16.0
-                                  );
-
-                                }
-                               // Navigator.pushNamed(context, LandingPage.id);
-                              },
-                              color: Colors.purple.shade900,
-                              textColor: Colors.white,
-                              child: Text("Login".toUpperCase(),
-                                  style:  TextStyle( fontFamily: 'RobotoMono',fontSize: 14)),
                             ),
+                  PasswordField(
+                    controller: passwordController,
+                    hasFloatingPlaceholder: true,
+                     errorMessage: 'must contain special character either . * @ # \$',
+                  ),
+                            Column(
+
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 50.0,vertical: 30.0),
+                                  child: RaisedButton(
+                                    padding: EdgeInsets.symmetric(vertical: 15.0),
+                                    shape: RoundedRectangleBorder(
+
+                                        borderRadius: BorderRadius.circular(30.0),
+                                        side: BorderSide(color: Colors.purple.shade900)),
+                                    onPressed: () {
+                                      if(emailController.text != '' && passwordController.text != ''){
+
+                                        setState(() {
+                                         fetchData();
+
+
+
+                                        });
+
+                                      }else{
+                                        Fluttertoast.showToast(
+                                            msg: "Please Fill all fields",
+                                            toastLength: Toast.LENGTH_SHORT,
+
+                                            timeInSecForIosWeb: 1,
+
+                                            textColor: Colors.white,
+                                            fontSize: 16.0
+                                        );
+
+                                      }
+                                     // Navigator.pushNamed(context, LandingPage.id);
+                                    },
+                                    color: Colors.purple.shade900,
+                                    textColor: Colors.white,
+                                    child: Text("Login".toUpperCase(),
+                                        style:  TextStyle( fontFamily: 'RobotoMono',fontSize: 14)),
+                                  ),
+                                ),
+
+                              ],
+                            ),
+                          GestureDetector(
+                              onTap:(){
+                                Navigator.pushNamed(context, ForgotPassword.id);
+                              },
+                              child: Text("Forgot Password ?"))
+                    ],
+                  ),
                           ),
 
-                        ],
-                      ),
-                    GestureDetector(
-                        onTap:(){
-                          Navigator.pushNamed(context, ForgotPassword.id);
-                        },
-                        child: Text("Forgot Password ?"))
-              ],
-            ),
-                    ),
-
+                        ),
+                      )
+                    ],
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -150,9 +156,9 @@ class _LoginState extends State<Login> {
       _saving = true;
     });
     Map data = {
-      'docket': '89152ac02591b52451fb16674a9a1cbc',
-      'Email': emailController.text,
-      'Password': passwordController.text,
+      'docket': Constant.docket,
+      'Email': emailController.text.trim(),
+      'Password': passwordController.text.trim(),
     };
     //encode Map to JSON
     var body = json.encode(data);

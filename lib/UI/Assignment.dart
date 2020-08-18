@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutterchalkparent/Resources/SpecialCharacters.dart';
 import 'package:flutterchalkparent/Responses/AssignmentResponse.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -7,6 +8,7 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutterchalkparent/Resources/AppBaar.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutterchalkparent/Resources/Constant.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 Color pagetheme = Color(0xFFFF4F79);
 class Assignment extends StatefulWidget {
@@ -22,35 +24,39 @@ class _AssignmentState extends State<Assignment> {
   List <Widget> widget_items  = new List();
   Widget _widget;
 
+  bool _saving = false;
   @override
   Widget build(BuildContext context) {
 
 
 
     return SafeArea(
-      child: Scaffold(
-        body: Container(
+      child: ModalProgressHUD(
+          inAsyncCall: _saving,
+        child: Scaffold(
+          body: Container(
 
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          child: Column(
-            children: <Widget>[
-              AppBaar(name: "Assignment", ImagePath: "Images/newassigment.png",
-                Themecolor: pagetheme,),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              children: <Widget>[
+                AppBaar(name: "Assignment", ImagePath: "Images/newassigment.png",
+                  Themecolor: pagetheme,),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
 
-                    Container(
-                      height:MediaQuery.of(context).size.height/2,
-                      width: MediaQuery.of(context).size.width,
-                      child:_widget ,
-                    ),
-                  ],
+                      Container(
+                        height:MediaQuery.of(context).size.height/2,
+                        width: MediaQuery.of(context).size.width,
+                        child:_widget ,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -74,7 +80,9 @@ class _AssignmentState extends State<Assignment> {
   }
 
   fetchAssignmentData(String ParentID,String Student_ID,String Class_ID ) async {
-
+setState(() {
+  _saving=true;
+});
     Map data = {
       'docket': Constant.docket,
       'Parent_ID': ParentID,
@@ -99,7 +107,7 @@ class _AssignmentState extends State<Assignment> {
         if(assignmentResponse.student_assignment_response[i].Status_ID == '1'){
           widget_items.add(AssignmentWidget(date:assignmentResponse.student_assignment_response[i].Submission_date ,
             subject: assignmentResponse.student_assignment_response[i].Subject_Name,
-            assignment: assignmentResponse.student_assignment_response[i].Assignments,
+            assignment: SpecialCharacters.getCurrectString(assignmentResponse.student_assignment_response[i].Assignments),
           ));
         }
       }
@@ -118,6 +126,8 @@ class _AssignmentState extends State<Assignment> {
           scale: 1,
           layout: SwiperLayout.STACK,
         );
+
+          _saving=false;
       });
 
 
@@ -125,6 +135,7 @@ class _AssignmentState extends State<Assignment> {
     }else{
           setState(() {
             _widget=Center(child: Text('No Assignment Found'),);
+            _saving=false;
           });
 
 

@@ -1,12 +1,19 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutterchalkparent/Resources/AppBaar.dart';
+import 'package:flutterchalkparent/Resources/Constant.dart';
+import 'package:flutterchalkparent/Responses/SendOTPResponse.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:http/http.dart' as http;
 
 import 'ChangePassword.dart';
+import 'ResetPassword.dart';
 
 
 Color pagetheme = Color(0xFF3385C9);
-var index=0;
+
 class ForgotPassword extends StatefulWidget {
   static const String id = "ForgotPassword";
   @override
@@ -14,7 +21,9 @@ class ForgotPassword extends StatefulWidget {
 }
 
 class _ForgotPasswordState extends State<ForgotPassword> {
-
+  static var index=0;
+  final emailController = TextEditingController();
+  static String pincode,otp;
   @override
   Widget build(BuildContext context) {
     var widget_items=[
@@ -25,6 +34,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             margin: EdgeInsets.only(top: 50),
             padding: EdgeInsets.all(20),
             child:  TextField(
+              controller: emailController,
               decoration: new InputDecoration(
                 border: new OutlineInputBorder(
                     borderSide: new BorderSide(color: Colors.teal)),
@@ -51,7 +61,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 side: BorderSide(color: Colors.grey)),
             onPressed: () {
               setState(() {
-                index=1;
+                fetchChangePassOTP( emailController.text);
+
               });
             },
             color: Colors.grey,
@@ -76,8 +87,15 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             width:200,
           child: PinCodeTextField(
             backgroundColor: Colors.transparent,
+
           length: 4,
-          obsecureText: false,
+            onChanged: (text) {
+              setState(() {
+                pincode=text;
+              });
+            },
+
+            obsecureText: false,
           animationType: AnimationType.fade,
           validator: (v) {
           if (v.length < 3) {
@@ -104,12 +122,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     onCompleted: (v) {
     print("Completed");
     },
-    onChanged: (value) {
-    print(value);
-    setState(() {
 
-    });
-    },
     beforeTextPaste: (text) {
     print("Allowing to paste $text");
     //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
@@ -126,7 +139,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 GestureDetector(
                     onTap: (){
                       setState(() {
-                        index = 0;
+                        fetchChangePassOTP( emailController.text);
                       });
                     },
                     child: Text('Resend OTP',style:  TextStyle( fontFamily: 'RobotoMono',color: Colors.blue),))
@@ -141,7 +154,23 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   side: BorderSide(color: Colors.blue)),
               onPressed: () {
                 setState(() {
-                  Navigator.pushNamed(context, ChangePassword.id);
+                  if(pincode==otp){
+                    Constant.otp = pincode;
+                    Constant.Email = emailController.text ;
+                    Navigator.pushNamed(context, ResetPassword.id,arguments: pincode);
+                  }else{
+                    Fluttertoast.showToast(
+                      msg: "Wrong OTP entered.",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.grey.shade800,
+                      textColor: Colors.white,
+                      fontSize: 16.0,
+
+                    );
+                  }
+
                 });
               },
               color: Colors.blue,
@@ -175,6 +204,47 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         
       ),
     );
+  }
+
+
+
+  fetchChangePassOTP(String Email) async {
+    setState(() {
+      // _saving = true;
+
+    });
+    Map data = {
+      'docket': Constant.docket,
+      'Contact_Number': Email,
+    };
+//encode Map to JSON
+    var body = json.encode(data);
+
+    var res = await http.post(Constant.BASE_URL + Constant.getSendOTP,
+        headers: {"Content-Type": "application/json"}, body: body);
+    print("${res.statusCode}");
+    print("${res.body}");
+    var decodedValue = jsonDecode(res.body);
+
+    var sendOTPResponse = SendOTPResponse.fromJson(decodedValue);
+    print("Valuee : ${SendOTPResponse}");
+
+    int total = 0;
+
+    if (sendOTPResponse.Status_Response == '200') {
+      String sllaybus;
+      otp=sendOTPResponse.resrt_password_otp_response;
+
+
+      setState(() {
+         index=1;
+      });
+    } else {
+      setState(() {
+
+
+      });
+    }
   }
 }
 

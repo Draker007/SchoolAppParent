@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutterchalkparent/Resources/AppBaar.dart';
 import 'package:flutterchalkparent/Resources/Constant.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SchoolLeaders extends StatefulWidget {
@@ -22,20 +23,25 @@ class _SchoolLeadersState extends State<SchoolLeaders> {
   static SchoolLeadersResponse schoolLeadersResponse;
   List <Widget> widget_items  = new List();
   Widget _widget=Container( );
+  bool   _saving = false;
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: Scaffold(
-      body: Container(
-        child: Column(
-          children: <Widget>[
-            AppBaar(name: "School Leaders",ImagePath: 'Images/newschoolleader.png',Themecolor: pagetheme,),
-            Expanded(
-              child: Container(
+    return SafeArea(child: ModalProgressHUD(
+      inAsyncCall: _saving,
+      child: Scaffold(
+        body: Container(
+          child: Column(
+            children: <Widget>[
+              AppBaar(name: "School Leaders",ImagePath: 'Images/newschoolleader.png',Themecolor: pagetheme,),
+              Expanded(
+                child: Container(
 
-                child:_widget
-              ),
-            )
-          ],
+                  child:_widget
+                ),
+              )
+            ],
+          ),
         ),
       ),
     ));
@@ -52,7 +58,10 @@ class _SchoolLeadersState extends State<SchoolLeaders> {
 
   }
   fetchHomeWorkData(String ParentID,String Student_ID,String Class_ID,String Section_ID ) async {
+setState(() {
+  _saving = false;
 
+});
     Map data = {
       'docket': Constant.docket,
       'Parent_ID': ParentID,
@@ -83,8 +92,9 @@ class _SchoolLeadersState extends State<SchoolLeaders> {
         }
       }
 
-      setState(() {
-        _widget= ListView(
+      setState(() {  _saving = false;
+
+      _widget= ListView(
           children:  widget_items,
         );
       });
@@ -93,6 +103,7 @@ class _SchoolLeadersState extends State<SchoolLeaders> {
     }else{
 
       setState(() {
+        _saving = false;
         _widget=Container(child: Center(child: Text('No Homework Found'),));
       });
 

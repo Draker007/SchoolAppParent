@@ -17,7 +17,9 @@ import 'UI/Exams.dart';
 import 'UI/Login.dart';
 import 'UI/LandingPage.dart';
 import 'UI/Profile.dart';
+import 'UI/ResetPassword.dart';
 import 'UI/Result.dart';
+import 'UI/SplashScreen.dart';
 import 'UI/Test.dart';
 
 void main() {
@@ -48,7 +50,7 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: Login.id,
+      initialRoute: SplashScreen.id,
       routes: {
         Login.id: (context) => Login(),
         LandingPage.id :(context) => LandingPage(),
@@ -67,6 +69,8 @@ class MyApp extends StatelessWidget {
         Exams.id : (context) => Exams(),
         Result.id : (context) => Result(),
         SchoolInfo.id : (context) => SchoolInfo(),
+        SplashScreen.id : (context) => SplashScreen(),
+        ResetPassword.id : (context) => ResetPassword(),
 
       },
     );

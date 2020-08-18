@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
 class Constant{
-    static final String DOWNLOADURL = "https://chlkschools.surebotdev.com/";
-    static final String BASE_URL = "https://chlkschools.surebotdev.com/index.php/Api/";
+    static final String DOWNLOADURL = "https://chlkschoolsqa.surebotdev.com/";
+    static final String BASE_URL = "https://chlkschoolsqa.surebotdev.com/index.php/Api/";
 
     static String docket = "89152ac02591b52451fb16674a9a1cbc";
 
+    static String otp ;
 
-
+    static String Email ;
 
 
 
@@ -30,6 +31,15 @@ class Constant{
     static String getAttendance = 'attendance_student';
     static String getExamSubjects = 'exams_subjects';
     static String getExamsList = 'results_exams_list';
+    static String getNotifications = 'notifications';
+    static String getSchoolGuide = 'important_notice';
+    static String getResults_student = 'results_student';
+    static String getsyllabus_files = 'syllabus_files';
+    static String getnewsletters_files = 'newsletters_files';
+    static String Student_change_password = 'Student_change_password';
+    static String getGraphResult = 'results_student_by_subject';
+    static String getSendOTP = 'student_resetpassword_otp_verification';
+    static String setNewPass = 'student_reset_password';
 
 
 }
